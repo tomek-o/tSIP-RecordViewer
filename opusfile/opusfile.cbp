@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="opusfile" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc_linaro_541_-_201705_aarch64_linux-gnu" />
+		<Build>
+			<Target title="DebugARM">
+				<Option output="bin/opusfile" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/DebugARM/" />
+				<Option type="2" />
+				<Option compiler="gcc_linaro_541_-_201705_aarch64_linux-gnu" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="ReleaseARM">
+				<Option output="bin/opusfile" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/ReleaseARM/" />
+				<Option type="2" />
+				<Option compiler="gcc_linaro_541_-_201705_aarch64_linux-gnu" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="DebugARM32">
+				<Option output="bin/opusfile" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/DebugARM/" />
+				<Option type="2" />
+				<Option compiler="gnu_gcc_compiler_for_arm_cubieboard" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="ReleaseARM32">
+				<Option output="bin/opusfile" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/ReleaseARM/" />
+				<Option type="2" />
+				<Option compiler="gnu_gcc_compiler_for_arm_cubieboard" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-DVAR_ARRAYS" />
+			<Add option="-DOPUS_BUILD" />
+			<Add option="-DFIXED_POINT=1" />
+			<Add directory="include" />
+			<Add directory="../ogg/include" />
+			<Add directory="../opus/include" />
+		</Compiler>
+		<Unit filename="include/opusfile.h" />
+		<Unit filename="src/http.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/info.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/internal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/internal.h" />
+		<Unit filename="src/opusfile.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/stream.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/wincerts.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/winerrno.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

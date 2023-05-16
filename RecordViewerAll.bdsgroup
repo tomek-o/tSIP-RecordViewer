@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">Default.Personality</Option>
+			<Option Name="ProjectType"></Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{8EE3CF45-1F13-42EB-8ADB-A35600DB4171}</Option>
+		</Option>
+	</PersonalityInfo>
+	<Default.Personality>  <Projects>
+      <Projects Name="common.lib">common\common.bdsproj</Projects>
+      <Projects Name="jsoncpp.lib">jsoncpp\jsoncpp.bdsproj</Projects>
+      <Projects Name="ogg.lib">ogg\ogg.bdsproj</Projects>
+      <Projects Name="libopus.lib">opus\libopus.bdsproj</Projects>
+      <Projects Name="libopusfile.lib">opusfile\libopusfile.bdsproj</Projects>
+      <Projects Name="RecordViewer.exe">RecordViewer\RecordViewer.bdsproj</Projects>
+      <Projects Name="Targets">common.lib jsoncpp.lib ogg.lib libopus.lib libopusfile.lib RecordViewer.exe</Projects>
+    </Projects>
+    <Dependencies>
+      <Dependency GUID="{5A2C6F65-D176-4077-829F-5D6CA6F17D03}">
+        <Dependency GUID="{690A683A-7576-4D98-9293-8AA35B0903D5}"/>
+        <Dependency GUID="{B2993EC5-7934-47AB-AEEE-40DED652D62C}"/>
+        <Dependency GUID="{4BE138CB-9F31-455E-9BED-15C7471AD0F9}"/>
+        <Dependency GUID="{07D681DA-66F5-4E3E-95AC-A35B804F0EFC}"/>
+        <Dependency GUID="{ACAF0FD5-CE08-44C4-981B-CB97838222AD}"/>
+      </Dependency>
+    </Dependencies>
+  </Default.Personality>
+</BorlandProject>
