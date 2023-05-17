@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
-  <PersonalityInfo>
-    <Option>
-      <Option Name="Personality">Default.Personality</Option>
-      <Option Name="ProjectType"></Option>
-      <Option Name="Version">1.0</Option>
-      <Option Name="GUID">{7A65BF20-2A77-4C17-B599-7A6F8BA3A290}</Option>
-    </Option>
-  </PersonalityInfo>
-  <Default.Personality>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">Default.Personality</Option>
+			<Option Name="ProjectType"></Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{7A65BF20-2A77-4C17-B599-7A6F8BA3A290}</Option>
+		</Option>
+	</PersonalityInfo>
+	<Default.Personality>  
     
     <Projects>
       <Projects Name="RecordViewer.exe">RecordViewer\RecordViewer.bdsproj</Projects>

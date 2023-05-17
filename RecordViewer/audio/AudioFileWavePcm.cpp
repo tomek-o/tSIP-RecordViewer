@@ -216,7 +216,12 @@ int AudioFileWavePcm::Close(void)
 	return -1;
 }
 
-int AudioFileWavePcm::GetChannels(void)
+int AudioFileWavePcm::GetChannelsCount(void)
+{
+	return waveFormat.channels;
+}
+
+int AudioFileWavePcm::GetRealChannelsCount(void)
 {
 	return waveFormat.channels;
 }

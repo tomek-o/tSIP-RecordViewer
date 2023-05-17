@@ -3,11 +3,9 @@
 #pragma hdrstop
 
 #include "AudioFilePlayer.h"
-#include "AudioFileOggOpus.h"
-#include "AudioFileWavePcm.h"
+#include "AudioFileFactory.h"
 #include "AudioDevicesList.h"
 #include "Log.h"
-#include <SysUtils.hpp>
 
 //---------------------------------------------------------------------------
 
@@ -47,7 +45,7 @@ DWORD WINAPI AudioFilePlayer::WaveOutThreadProc(LPVOID data)
 	{
         WAVEFORMATEX &waveFormat = player->waveFormat;
 		waveFormat.wFormatTag = WAVE_FORMAT_PCM;
-		waveFormat.nChannels = static_cast<WORD>(player->file->GetChannels());
+		waveFormat.nChannels = static_cast<WORD>(player->file->GetChannelsCount());
 		waveFormat.nSamplesPerSec = player->file->GetSampleRate();
 		waveFormat.wBitsPerSample = 16;
 		waveFormat.nBlockAlign = static_cast<WORD>(waveFormat.wBitsPerSample / 8 * waveFormat.nChannels);
@@ -146,6 +144,11 @@ AudioFilePlayer::AudioFilePlayer(void):
 
 AudioFilePlayer::~AudioFilePlayer(void)
 {
+	if (file)
+	{
+		delete file;
+		file = NULL;
+	}
 	DeleteCriticalSection(&waveCriticalSection);
 }
 
@@ -244,7 +247,6 @@ int AudioFilePlayer::writeAudio(HWAVEOUT hWaveOut, short* data, int size)
 int AudioFilePlayer::Play(AnsiString fileName, AnsiString audioDevice)
 {
     LOG("AudioFilePlayer: play %s using [%s] audio device", fileName.c_str(), audioDevice.c_str());
-	int status = -1;
 	Stop();
 	stopRequest = false;
 	pauseRequest = false;
@@ -270,34 +272,9 @@ int AudioFilePlayer::Play(AnsiString fileName, AnsiString audioDevice)
 		}
 	}
 
-	AnsiString ext = ExtractFileExt(fileName);
-	if (ext == ".ogg")
-	{
-		file = new AudioFileOggOpus();
-		status = file->Open(fileName);
-		if (status != 0)
-		{
-			delete file;
-			file = NULL;
-			return status;
-		}		
-	}
-	else if (ext == ".wav")
-	{
-		file = new AudioFileWavePcm();
-		status = file->Open(fileName);
-		if (status != 0)
-		{
-			delete file;
-			file = NULL;
-			return status;
-		}
-	}
-	else
-	{
-		LOG("Unhandled file extension!");
+	file = CreateAudioFile(fileName);
+	if (file == NULL)
 		return -1;
-	}
 
 	playBlockSize = file->GetSampleRate() / 4;
 

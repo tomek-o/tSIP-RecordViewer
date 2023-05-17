@@ -12,7 +12,8 @@
 #pragma package(smart_init)
 
 AudioFileOggOpus::AudioFileOggOpus(void):
-	oggOpusFile(NULL)
+	oggOpusFile(NULL),
+	realChannelsCount(2)
 {
 
 }
@@ -39,6 +40,10 @@ int AudioFileOggOpus::Open(AnsiString fileName)
 	totalPcmSamples = op_pcm_total(oggOpusFile, -1);
 	pcmPosition = 0;
 
+	// real channel count
+	realChannelsCount = op_channel_count(oggOpusFile, 0);
+	LOG("Opus real channel count = %d", realChannelsCount);	
+
 	return 0;
 }
 
@@ -52,9 +57,14 @@ int AudioFileOggOpus::Close(void)
 	return -1;
 }
 
-int AudioFileOggOpus::GetChannels(void)
+int AudioFileOggOpus::GetChannelsCount(void)
 {
 	return 2;
+}
+
+int AudioFileOggOpus::GetRealChannelsCount(void)
+{
+	return realChannelsCount;
 }
 
 int AudioFileOggOpus::GetSampleRate(void)

@@ -22,7 +22,10 @@ public:
 	virtual ~AudioFile(void) {};
 	virtual int Open(AnsiString fileName) = 0;
 	virtual int Close(void) = 0;
-	virtual int GetChannels(void) = 0;
+	virtual int GetChannelsCount(void) = 0;
+	/** Opus would report two channels due to type of API being used but it might have mono content
+	*/
+	virtual int GetRealChannelsCount(void) = 0;
 	virtual int GetSampleRate(void) = 0;
 	virtual int GetSamples(int16_t *buf, int *count) = 0;
 	bool IsEof(void) const
