@@ -36,6 +36,10 @@ public:
 	{
     	bool decodeBase64Uri;
 	} Recordings;
+	struct _Audio
+	{
+		AnsiString outputDevice;
+	} Audio;
 };
 
 extern Settings appSettings;

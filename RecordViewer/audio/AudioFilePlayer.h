@@ -25,6 +25,7 @@ private:
 	WAVEFORMATEX  waveFormat;
 	WAVEHDR* allocateBlocks(int size, int count);
 	int writeAudio(HWAVEOUT hWaveOut, int16_t* data, int size);
+	unsigned int playBlockSize;
 
 	AudioFile *file;
 

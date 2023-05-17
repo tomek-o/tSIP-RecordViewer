@@ -15,6 +15,10 @@ USEFORM("FormRecordings.cpp", frmRecordings);
 #pragma link "libopus.lib"
 #pragma link "libopusfile.lib"
 
+
+#include "Log.h"
+
+
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	try
@@ -42,6 +46,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			Application->ShowException(&exception);
 		}
 	}
+	CLog::Instance()->Destroy();	
 	return 0;
 }
 //---------------------------------------------------------------------------

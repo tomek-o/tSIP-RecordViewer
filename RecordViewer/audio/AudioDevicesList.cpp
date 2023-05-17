@@ -20,11 +20,10 @@ AudioDevicesList::AudioDevicesList(void)
 void AudioDevicesList::Refresh(void)
 {
 	winwaveDevsOut.clear();
+	winwaveDevsOut.push_back("WAVE mapper (default device)");
 
 	WAVEOUTCAPS woc;
 	int nOutDevices = waveOutGetNumDevs();
-	//if (nOutDevices > 0)
-	//	winwaveDevsOut.push_back("WAVE mapper");
 	for (int i=0; i<nOutDevices; i++)
 	{
 		if (waveOutGetDevCaps(i, &woc, sizeof(WAVEOUTCAPS))==MMSYSERR_NOERROR)

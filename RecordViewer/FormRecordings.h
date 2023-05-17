@@ -47,7 +47,6 @@ __published:	// IDE-managed Components
 	void __fastcall lvRecordsData(TObject *Sender, TListItem *Item);
 	void __fastcall lvRecordsColumnClick(TObject *Sender, TListColumn *Column);
 	void __fastcall edFilterChange(TObject *Sender);
-	void __fastcall MediaPlayerNotify(TObject *Sender);
 	void __fastcall tmrRefreshPlayerPositionTimer(TObject *Sender);
 	void __fastcall trbarVolumeChange(TObject *Sender);
 	void __fastcall btnRefreshRecordListClick(TObject *Sender);
@@ -63,6 +62,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnPauseClick(TObject *Sender);
 	void __fastcall btnPlayClick(TObject *Sender);
 	void __fastcall miOpenFileInDefaultPlayerClick(TObject *Sender);
+	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
 private:	// User declarations
 	void __fastcall TrackBarMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
 	void __fastcall TrackBarMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);

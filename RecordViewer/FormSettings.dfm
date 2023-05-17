@@ -5,7 +5,7 @@ object frmSettings: TfrmSettings
   BorderStyle = bsSingle
   Caption = 'Settings'
   ClientHeight = 251
-  ClientWidth = 341
+  ClientWidth = 366
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,13 +20,14 @@ object frmSettings: TfrmSettings
   object pnlBottom: TPanel
     Left = 0
     Top = 214
-    Width = 341
+    Width = 366
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitWidth = 341
     object btnCancel: TButton
-      Left = 258
+      Left = 282
       Top = 6
       Width = 75
       Height = 25
@@ -35,7 +36,7 @@ object frmSettings: TfrmSettings
       OnClick = btnCancelClick
     end
     object btnApply: TButton
-      Left = 177
+      Left = 201
       Top = 6
       Width = 75
       Height = 25
@@ -47,13 +48,17 @@ object frmSettings: TfrmSettings
   object pcGeneral: TPageControl
     Left = 0
     Top = 0
-    Width = 341
+    Width = 366
     Height = 214
-    ActivePage = TabSheet1
+    ActivePage = tsGeneral
     Align = alClient
     TabOrder = 0
-    object TabSheet1: TTabSheet
+    object tsGeneral: TTabSheet
       Caption = 'General'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 333
+      ExplicitHeight = 0
       object chbAlwaysOnTop: TCheckBox
         Left = 3
         Top = 3
@@ -64,9 +69,45 @@ object frmSettings: TfrmSettings
         OnClick = chbAlwaysOnTopClick
       end
     end
+    object tsAudio: TTabSheet
+      Caption = 'Audio'
+      ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 333
+      ExplicitHeight = 0
+      object lblAudioOutput: TLabel
+        Left = 16
+        Top = 11
+        Width = 34
+        Height = 13
+        Caption = 'Output'
+      end
+      object btnRefreshAudioDevicesLists: TButton
+        Left = 16
+        Top = 35
+        Width = 185
+        Height = 25
+        Caption = 'Refresh audio devices lists'
+        TabOrder = 0
+      end
+      object cbAudioOutput: TComboBox
+        Left = 56
+        Top = 8
+        Width = 285
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 0
+        TabOrder = 1
+      end
+    end
     object pcLogging: TTabSheet
       Caption = 'Logging'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 333
+      ExplicitHeight = 0
       object lblUiCapacity: TLabel
         Left = 5
         Top = 26

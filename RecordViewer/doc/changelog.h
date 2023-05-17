@@ -26,4 +26,9 @@ Version 0.2.1
 - partial/minimal support for newly added Opus/OGG recording in tSIP:
 	- listing also .ogg files
 	- .ogg files are opened for playback using default application when double clicked or "play" is pressed
+
+Version 0.3
+- playback for both .wav and .ogg files
+- settings: output audio device selection
+
 */

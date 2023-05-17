@@ -6,10 +6,10 @@
 #include "FormRecordings.h"
 #include "Contacts.h"
 #include "Settings.h"
-#include "BtnController.h"
-#include "TimeCounter.h"
+#include "common/BtnController.h"
+#include "common/TimeCounter.h"
 #include "MyTrackBar.h"
-#include "base64.h"
+#include "common/base64.h"
 #include <Clipbrd.hpp>
 #include <algorithm>
 
@@ -252,38 +252,6 @@ void __fastcall TfrmRecordings::edFilterChange(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-
-
-void __fastcall TfrmRecordings::MediaPlayerNotify(TObject *Sender)
-{
-/*
-  TMPModes = (mpNotReady, mpStopped, mpPlaying, mpRecording, mpSeeking,
-    mpPaused, mpOpen);
-*/
-	int TODO__ENABLE_DISABLE_BUTTONS;
-#if 0
-	switch (MediaPlayer->Mode)
-	{
-	case mpStopped:
-		tmrRefreshPlayerPosition->Enabled = false;
-		TrackBar->Visible = false;
-		MediaPlayer->EnabledButtons = TButtonSet() << btPlay;
-		MediaPlayer->Close();
-		break;
-	case mpPlaying:
-		tmrRefreshPlayerPosition->Enabled = true;
-		TrackBar->Visible = true;
-		TrackBar->Position = MediaPlayer->Position;
-		TrackBar->Max = MediaPlayer->Length;
-		MediaPlayer->EnabledButtons = TButtonSet() << btPause << btStop;
-		break;
-	case mpPaused:
-		break;
-	}
-#endif	
-}
-//---------------------------------------------------------------------------
-
 void __fastcall TfrmRecordings::tmrRefreshPlayerPositionTimer(
       TObject *Sender)
 {
@@ -299,8 +267,8 @@ void __fastcall TfrmRecordings::tmrRefreshPlayerPositionTimer(
 	if (player.IsPaused())
 		return;
 
-	TrackBar->Max = player.GetTotalPcmSamples() * TRACKBAR_TICKS_PER_SECOND / player.GetSampleRate();
-	TrackBar->Position = player.GetPcmPosition() * TRACKBAR_TICKS_PER_SECOND / player.GetSampleRate();
+	TrackBar->Max = static_cast<int>(player.GetTotalPcmSamples() * TRACKBAR_TICKS_PER_SECOND / player.GetSampleRate());
+	TrackBar->Position = static_cast<int>(player.GetPcmPosition() * TRACKBAR_TICKS_PER_SECOND / player.GetSampleRate());
 	btnPlay->Enabled = false;
 	btnStop->Enabled = true;
 	btnPause->Enabled = true;
@@ -496,36 +464,7 @@ void TfrmRecordings::Play(void)
 	if (lvRecords->Selected)
 	{
 		AnsiString filename = records_filtered[lvRecords->Selected->Index].asFilename;
-	#if 0
-		AnsiString ext = ExtractFileExt(filename);
-		if (ext == ".wav")
-		{
-			try
-			{
-				MediaPlayer->Open();
-				MediaPlayer->Notify = true;
-				MediaPlayer->Play();
-				MediaPlayer->EnabledButtons = TButtonSet() << btPause << btStop;
-			}
-			catch(...)
-			{
-				if (FileExists(MediaPlayer->FileName))
-				{
-					MediaPlayer->EnabledButtons = TButtonSet() << btPlay;
-				}
-				else
-				{
-					MediaPlayer->EnabledButtons = TButtonSet();
-				}
-			}
-		}
-		else
-		{
-			ShellExecute(NULL, "open", filename.c_str(), NULL, NULL, SW_SHOWNORMAL);
-		}
-	#endif
-		int TODO__AUDIO_DEVICE_SELECTION;
-		player.Play(filename, "");
+		player.Play(filename, appSettings.Audio.outputDevice);
 		TrackBar->Visible = true;
 		tmrRefreshPlayerPosition->Enabled = true;
 	}
@@ -661,6 +600,12 @@ void __fastcall TfrmRecordings::miOpenFileInDefaultPlayerClick(TObject *Sender)
 		AnsiString filename = records_filtered[lvRecords->Selected->Index].asFilename;
 		ShellExecute(NULL, "open", filename.c_str(), NULL, NULL, SW_SHOWNORMAL);
 	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmRecordings::FormCloseQuery(TObject *Sender, bool &CanClose)
+{
+	player.Stop();	
 }
 //---------------------------------------------------------------------------
 

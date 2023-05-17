@@ -15,7 +15,6 @@
 
 namespace
 {
-	enum { PLAY_BLOCK_SIZE = 8000 };	///< bytes
 	enum { PLAY_BLOCK_COUNT = 3 };
 }
 
@@ -39,7 +38,7 @@ DWORD WINAPI AudioFilePlayer::WaveOutThreadProc(LPVOID data)
 	player->waveCurrentBlock   = 0;
 	int iError = 0;
 
-    player->waveBlocks = player->allocateBlocks(PLAY_BLOCK_SIZE, PLAY_BLOCK_COUNT);
+	player->waveBlocks = player->allocateBlocks(player->playBlockSize, PLAY_BLOCK_COUNT);
     if(!player->waveBlocks)
     {
 		iError = 1;
@@ -136,6 +135,7 @@ AudioFilePlayer::AudioFilePlayer(void):
 	waveBlocks(NULL),
 	waveFreeBlockCount(0),
 	waveCurrentBlock(0),
+	playBlockSize(8000),
 	stopRequest(false),
 	pauseRequest(false),
 	playing(false),
@@ -146,7 +146,6 @@ AudioFilePlayer::AudioFilePlayer(void):
 
 AudioFilePlayer::~AudioFilePlayer(void)
 {
-    Stop();
 	DeleteCriticalSection(&waveCriticalSection);
 }
 
@@ -187,17 +186,17 @@ int AudioFilePlayer::writeAudio(HWAVEOUT hWaveOut, short* data, int size)
         if(current->dwFlags & WHDR_PREPARED)
             waveOutUnprepareHeader(hWaveOut, current, sizeof(WAVEHDR));
 
-        if(size < (int)(PLAY_BLOCK_SIZE - current->dwUser)) {
+        if(size < (int)(playBlockSize - current->dwUser)) {
             memcpy(current->lpData + current->dwUser, data, size);
             current->dwUser += size;
             return -1;
         }
 
-		remain = PLAY_BLOCK_SIZE - current->dwUser;
+		remain = playBlockSize - current->dwUser;
 		memcpy(current->lpData + current->dwUser, data, remain);
 		size -= remain;
 		data += remain / sizeof(data[0]);
-        current->dwBufferLength = PLAY_BLOCK_SIZE;
+        current->dwBufferLength = playBlockSize;
 
 		waveOutPrepareHeader(hWaveOut, current, sizeof(WAVEHDR));
 		//LOG("waveOutWrite");
@@ -299,6 +298,8 @@ int AudioFilePlayer::Play(AnsiString fileName, AnsiString audioDevice)
 		LOG("Unhandled file extension!");
 		return -1;
 	}
+
+	playBlockSize = file->GetSampleRate() / 4;
 
 	playing = true;
 	WaveOutThread = CreateThread(NULL, 0, WaveOutThreadProc, this, THREAD_PRIORITY_HIGHEST, &dwtid);

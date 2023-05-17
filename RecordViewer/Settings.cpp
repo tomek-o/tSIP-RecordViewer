@@ -12,6 +12,11 @@
 
 Settings appSettings;
 
+inline void strncpyz(char* dst, const char* src, int dstsize) {
+	strncpy(dst, src, dstsize);
+	dst[dstsize-1] = '\0';
+}
+
 bool Settings::Read(AnsiString asFileName)
 {
 	TIniFile *ini = NULL;
@@ -49,6 +54,8 @@ bool Settings::Read(AnsiString asFileName)
 
 		Contacts.fileName = ini->ReadString("Contacts", "FileName", "");
 
+		Audio.outputDevice = ini->ReadString("Audio", "OutputDevice", "");
+
 		delete ini;
 	}
 	catch (...)
@@ -79,6 +86,8 @@ bool Settings::Write(AnsiString asFileName)
 		ini->WriteInteger("Logging", "MaxUiLogLines", Logging.iMaxUiLogLines);
 
 		ini->WriteString("Contacts", "FileName", Contacts.fileName);
+
+		ini->WriteString("Audio", "OutputDevice", Audio.outputDevice);
 
 		delete ini;
 	}

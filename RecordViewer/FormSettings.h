@@ -19,19 +19,23 @@ __published:	// IDE-managed Components
 	TButton *btnCancel;
 	TButton *btnApply;
 	TPageControl *pcGeneral;
-	TTabSheet *TabSheet1;
+	TTabSheet *tsGeneral;
 	TTabSheet *pcLogging;
 	TCheckBox *chbAlwaysOnTop;
 	TLabel *lblUiCapacity;
 	TComboBox *cmbMaxUiLogLines;
 	TCheckBox *chbLogToFile;
+	TTabSheet *tsAudio;
+	TLabel *lblAudioOutput;
+	TButton *btnRefreshAudioDevicesLists;
+	TComboBox *cbAudioOutput;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall chbAlwaysOnTopClick(TObject *Sender);
 	void __fastcall cmbMaxUiLogLinesChange(TObject *Sender);
 private:	// User declarations
-
+	void RefreshAudioDevicesList(void);
 public:		// User declarations
 	__fastcall TfrmSettings(TComponent* Owner);
 	Settings *appSettings;
