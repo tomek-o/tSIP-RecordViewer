@@ -14,11 +14,13 @@
       <Projects Name="ogg.lib">ogg\ogg.bdsproj</Projects>
       <Projects Name="libopus.lib">opus\libopus.bdsproj</Projects>
       <Projects Name="libopusfile.lib">opusfile\libopusfile.bdsproj</Projects>
+      <Projects Name="libspeex.lib">speex\build\libspeex.bdsproj</Projects>
       <Projects Name="RecordViewer.exe">RecordViewer\RecordViewer.bdsproj</Projects>
-      <Projects Name="Targets">common.lib jsoncpp.lib ogg.lib libopus.lib libopusfile.lib RecordViewer.exe</Projects>
+      <Projects Name="Targets">common.lib jsoncpp.lib ogg.lib libopus.lib libopusfile.lib libspeex.lib RecordViewer.exe</Projects>
     </Projects>
     <Dependencies>
       <Dependency GUID="{5A2C6F65-D176-4077-829F-5D6CA6F17D03}">
+        <Dependency GUID="{3555BA4B-67B2-4597-93B7-C4F2B4B2813D}"/>
         <Dependency GUID="{690A683A-7576-4D98-9293-8AA35B0903D5}"/>
         <Dependency GUID="{B2993EC5-7934-47AB-AEEE-40DED652D62C}"/>
         <Dependency GUID="{4BE138CB-9F31-455E-9BED-15C7471AD0F9}"/>
