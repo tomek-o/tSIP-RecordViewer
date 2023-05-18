@@ -15,8 +15,6 @@ object frmRecordings: TfrmRecordings
   OldCreateOrder = False
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object pnlBottom: TPanel
@@ -213,6 +211,10 @@ object frmRecordings: TfrmRecordings
     object miOpenFileInDefaultPlayer: TMenuItem
       Caption = 'Open file in default player'
       OnClick = miOpenFileInDefaultPlayerClick
+    end
+    object miTranscribeFile: TMenuItem
+      Caption = 'Transcribe file'
+      OnClick = miTranscribeFileClick
     end
     object miDeleteFiles: TMenuItem
       Caption = 'Delete selected records'

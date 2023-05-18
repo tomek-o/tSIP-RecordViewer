@@ -13,11 +13,13 @@ class AudioFileTranscription
 private:
 	static DWORD WINAPI TranscriptionThreadProc(LPVOID data);
 	bool running;
+	AnsiString fileName;
 	AudioFile *file;
 	AnsiString whisperExe;
 	AnsiString model;
 	AnsiString language;
 	unsigned int threadCount;
+	int Process(void);
 public:
 	AudioFileTranscription(void):
 		running(false),

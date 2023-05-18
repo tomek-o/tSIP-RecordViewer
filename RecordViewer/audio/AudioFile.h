@@ -27,7 +27,7 @@ public:
 	*/
 	virtual int GetRealChannelsCount(void) = 0;
 	virtual int GetSampleRate(void) = 0;
-	virtual int GetSamples(int16_t *buf, int *count) = 0;
+	virtual int GetSamples(int16_t *buf, unsigned int *count) = 0;
 	bool IsEof(void) const
 	{
     	return eof;

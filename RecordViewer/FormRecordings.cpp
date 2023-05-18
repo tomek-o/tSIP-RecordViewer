@@ -6,6 +6,7 @@
 #include "FormRecordings.h"
 #include "Contacts.h"
 #include "Settings.h"
+#include "AudioFileTranscription.h"
 #include "common/BtnController.h"
 #include "common/TimeCounter.h"
 #include "MyTrackBar.h"
@@ -22,6 +23,7 @@ TfrmRecordings *frmRecordings;
 namespace {
 	Contacts contacts;
 	enum { TRACKBAR_TICKS_PER_SECOND = 10 };
+	AudioFileTranscription transcription;	
 }
 
 //---------------------------------------------------------------------------
@@ -606,6 +608,18 @@ void __fastcall TfrmRecordings::miOpenFileInDefaultPlayerClick(TObject *Sender)
 void __fastcall TfrmRecordings::FormCloseQuery(TObject *Sender, bool &CanClose)
 {
 	player.Stop();	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmRecordings::miTranscribeFileClick(TObject *Sender)
+{
+	if (lvRecords->Selected)
+	{
+		AnsiString filename = records_filtered[lvRecords->Selected->Index].asFilename;
+		int TODO__PREVENT_MULTIPLE_RUN_SAME_TIME;
+		xxx
+		transcription.Transcribe(filename, AnsiString whisperExe, AnsiString model, AnsiString language, unsigned int threadCount);
+	}
 }
 //---------------------------------------------------------------------------
 

@@ -43,6 +43,7 @@ __published:	// IDE-managed Components
 	TButton *btnStop;
 	TButton *btnPause;
 	TMenuItem *miOpenFileInDefaultPlayer;
+	TMenuItem *miTranscribeFile;
 	void __fastcall miPopupRecordsCopyClick(TObject *Sender);
 	void __fastcall lvRecordsData(TObject *Sender, TListItem *Item);
 	void __fastcall lvRecordsColumnClick(TObject *Sender, TListColumn *Column);
@@ -63,6 +64,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnPlayClick(TObject *Sender);
 	void __fastcall miOpenFileInDefaultPlayerClick(TObject *Sender);
 	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
+	void __fastcall miTranscribeFileClick(TObject *Sender);
 private:	// User declarations
 	void __fastcall TrackBarMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
 	void __fastcall TrackBarMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);

@@ -19,7 +19,7 @@ public:
 	int GetChannelsCount(void);
 	int GetRealChannelsCount(void);
 	int GetSampleRate(void);
-	int GetSamples(int16_t *buf, int *count);
+	int GetSamples(int16_t *buf, unsigned int *count);
 	int SeekToPcmPosition(int64_t pos);
 
 	struct WaveFormat {

@@ -31,4 +31,8 @@ Version 0.3
 - playback for both .wav and .ogg files
 - settings: output audio device selection
 
+
+TODO:
+	- settings: switch from ini to JSON
+	- whisper.cpp already has -di / --diarize option
 */

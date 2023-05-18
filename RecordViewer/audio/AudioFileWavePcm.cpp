@@ -231,7 +231,7 @@ int AudioFileWavePcm::GetSampleRate(void)
 	return waveFormat.srate;
 }
 
-int AudioFileWavePcm::GetSamples(int16_t *buf, int *count)
+int AudioFileWavePcm::GetSamples(int16_t *buf, unsigned int *count)
 {
 	unsigned int left = *count;
 	unsigned int pos = 0;

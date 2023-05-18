@@ -71,7 +71,7 @@ DWORD WINAPI AudioFilePlayer::WaveOutThreadProc(LPVOID data)
 				player->seekPcmPositionRequest = -1;
 			}
 
-			int count = sizeof(buffer)/sizeof(buffer[0]);
+			unsigned int count = sizeof(buffer)/sizeof(buffer[0]);
 			int ret = 0;
 			if (player->pauseRequest == false)
 			{

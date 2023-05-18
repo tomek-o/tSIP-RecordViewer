@@ -14,6 +14,7 @@ USEFORM("FormRecordings.cpp", frmRecordings);
 #pragma link "ogg.lib"
 #pragma link "libopus.lib"
 #pragma link "libopusfile.lib"
+#pragma link "libspeex.lib"
 
 
 #include "Log.h"

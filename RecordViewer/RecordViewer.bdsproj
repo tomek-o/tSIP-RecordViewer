@@ -28,6 +28,7 @@
         <property category="build.config.1" name="settings.win32b" value="default"/>
         <property category="build.config.1" name="type" value="Toolset"/>
         <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
+        <property category="build.node" name="lastconfig" value="Release_Build"/>
         <property category="build.node" name="libraries" value="vclx.lib vcl.lib rtl.lib"/>
         <property category="build.node" name="name" value="RecordViewer.exe"/>
         <property category="build.node" name="packages" value="vclx;vcl;rtl;dbrtl;vcldb;dbxcds;dbexpress;xmlrtl;vclie;inet;inetdbbde;inetdbxpress;dsnap;soaprtl;bdertl;vcldbx"/>
@@ -65,6 +66,7 @@
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.4" value="..\opus\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.5" value="..\opusfile\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.6" value="..\ogg\debug_build"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.7" value="..\speex\build\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.tasm32" name="option.z.enabled" value="1"/>
@@ -86,6 +88,7 @@
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.4" value="..\opus\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.5" value="..\opusfile\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.6" value="..\ogg\release_build"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.7" value="..\speex\build\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
         <property category="win32.Release_Build.win32b.tasm32" name="option.z.enabled" value="0"/>
@@ -107,6 +110,7 @@
           <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.Hc.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="audio"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="..\speex\include"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="$(BDS)\include"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="$(BDS)\include\dinkumware"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="$(BDS)\include\vcl"/>
@@ -250,6 +254,7 @@
         <FILE FILENAME="audio\AudioFileOggOpus.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioFileOggOpus" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\AudioFileOggOpus.h"/>
         <FILE FILENAME="audio\AudioFileFactory.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioFileFactory" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\AudioFileFactory.h"/>
         <FILE FILENAME="audio\AudioFileTranscription.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioFileTranscription" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\AudioFileTranscription.h"/>
+        <FILE FILENAME="audio\AudioFileConverter.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioFileConverter" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\AudioFileConverter.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

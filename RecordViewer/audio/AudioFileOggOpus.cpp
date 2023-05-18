@@ -42,7 +42,15 @@ int AudioFileOggOpus::Open(AnsiString fileName)
 
 	// real channel count
 	realChannelsCount = op_channel_count(oggOpusFile, 0);
-	LOG("Opus real channel count = %d", realChannelsCount);	
+	LOG("Opus real channel count = %d", realChannelsCount);
+
+	if (realChannelsCount != 1 && realChannelsCount != 2)
+	{
+		LOG("Opus/OGG: unexpected number of channels in source file (%s)!", fileName.c_str());
+		op_free(oggOpusFile);
+		oggOpusFile = NULL;
+		return -2;
+	}
 
 	return 0;
 }
@@ -72,7 +80,7 @@ int AudioFileOggOpus::GetSampleRate(void)
 	return 48000;
 }
 
-int AudioFileOggOpus::GetSamples(int16_t *buf, int *count)
+int AudioFileOggOpus::GetSamples(int16_t *buf, unsigned int *count)
 {
 	unsigned int left = *count;
 	unsigned int pos = 0;
