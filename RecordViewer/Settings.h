@@ -10,9 +10,15 @@
 class Settings
 {
 public:
-	bool Read(AnsiString asFileName);
-	bool Write(AnsiString asFileName);
-
+	int Read(AnsiString asFileName);
+	int Write(AnsiString asFileName);
+	void SetDefault(void);
+	struct _gui
+	{
+		enum { SCALING_MIN = 50 };
+		enum { SCALING_MAX = 200 };
+		int scalingPct;					///< scaling (percentage)
+	} gui;
 	struct _frmMain
 	{
 		int iPosX, iPosY;				///< main window coordinates
@@ -20,10 +26,18 @@ public:
 		bool bWindowMaximized;			///< is main window maximize?
 		bool bAlwaysOnTop;
 	} frmMain;
-
 	struct _Logging
 	{
 		bool bLogToFile;
+		bool bFlush;
+		enum {
+			MIN_MAX_FILE_SIZE = 0,
+			MAX_MAX_FILE_SIZE = 1000*1024*1024
+		};
+		enum {
+            DEF_MAX_FILE_SIZE = 10*1024*1024
+        };
+		int iMaxFileSize;
 		unsigned int iMaxUiLogLines;
 	} Logging;
 
@@ -36,10 +50,23 @@ public:
 	{
     	bool decodeBase64Uri;
 	} Recordings;
+	
 	struct _Audio
 	{
 		AnsiString outputDevice;
 	} Audio;
+
+	struct _Transcription
+	{
+		AnsiString whisperExe;
+		AnsiString model;
+		AnsiString language;
+		unsigned int threadCount;
+		_Transcription(void):
+			whisperExe("whisper.cpp\\whisper.exe"),
+			threadCount(2)
+		{}
+	} Transcription;
 };
 
 extern Settings appSettings;

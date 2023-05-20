@@ -3,8 +3,10 @@
 
 #pragma hdrstop
 
-#include <IniFiles.hpp>
 #include "Settings.h"
+#include <algorithm>
+#include <fstream>
+#include <json/json.h>
 
 //---------------------------------------------------------------------------
 
@@ -17,88 +19,151 @@ inline void strncpyz(char* dst, const char* src, int dstsize) {
 	dst[dstsize-1] = '\0';
 }
 
-bool Settings::Read(AnsiString asFileName)
+void Settings::SetDefault(void)
 {
-	TIniFile *ini = NULL;
-	try
-	{
-		ini = new TIniFile(asFileName);
-		// main window startup position
-		int maxX = GetSystemMetrics(SM_CXSCREEN);
-		int maxY = GetSystemMetrics(SM_CYSCREEN);
-		frmMain.iWidth = ini->ReadInteger("frmMain", "AppWidth", 350);
-		frmMain.iHeight = ini->ReadInteger("frmMain", "AppHeight", 300);
-		if (frmMain.iWidth < 250 || frmMain.iWidth > maxX + 20)
-		{
-			frmMain.iWidth = 250;
-		}
-		if (frmMain.iHeight < 200 || frmMain.iHeight > maxY + 20)
-		{
-			frmMain.iHeight = 200;
-		}
-		frmMain.iPosX = ini->ReadInteger("frmMain", "AppPositionX", 30);
-		frmMain.iPosY = ini->ReadInteger("frmMain", "AppPositionY", 30);
-		if (frmMain.iPosX < 0)
-			frmMain.iPosX = 0;
-		if (frmMain.iPosY < 0)
-			frmMain.iPosY = 0;
-		if (frmMain.iPosX + frmMain.iWidth > maxX)
-			frmMain.iPosX = maxX - frmMain.iWidth;
-		if (frmMain.iPosY + frmMain.iHeight > maxY)
-			frmMain.iPosY = maxY - frmMain.iHeight;
-		frmMain.bWindowMaximized = ini->ReadBool("frmMain", "Maximized", false);
-		frmMain.bAlwaysOnTop = ini->ReadBool("frmMain", "AlwaysOnTop", false);
+	frmMain.iWidth = 600;
+	frmMain.iHeight = 500;
+	frmMain.iPosX = 30;
+	frmMain.iPosY = 30;
+	frmMain.bWindowMaximized = false;
+	frmMain.bAlwaysOnTop = false;
 
-		Logging.bLogToFile = ini->ReadBool("Logging", "LogToFile", false);
-		Logging.iMaxUiLogLines = ini->ReadInteger("Logging", "MaxUiLogLines", 1000);
-
-		Contacts.fileName = ini->ReadString("Contacts", "FileName", "");
-
-		Audio.outputDevice = ini->ReadString("Audio", "OutputDevice", "");
-
-		delete ini;
-	}
-	catch (...)
-	{
-		if (ini)
-		{
-			delete ini;
-		}
-		return false;
-	}
-	return true;
+	Logging.bLogToFile = false;
+	Logging.bFlush = false;
+	Logging.iMaxFileSize = Settings::_Logging::DEF_MAX_FILE_SIZE;
+	Logging.iMaxUiLogLines = 5000;
 }
 
-bool Settings::Write(AnsiString asFileName)
+int Settings::Read(AnsiString asFileName)
 {
-	TIniFile *ini = NULL;
+	Json::Value root;   // will contains the root value after parsing.
+	Json::Reader reader;
+
+    SetDefault();
+
 	try
 	{
-		ini = new TIniFile(asFileName);
-		ini->WriteInteger("frmMain", "AppWidth", frmMain.iWidth);
-		ini->WriteInteger("frmMain", "AppHeight", frmMain.iHeight);
-		ini->WriteInteger("frmMain", "AppPositionX", frmMain.iPosX);
-		ini->WriteInteger("frmMain", "AppPositionY", frmMain.iPosY);
-		ini->WriteBool("frmMain", "Maximized", frmMain.bWindowMaximized);
-		ini->WriteBool("frmMain", "AlwaysOnTop", frmMain.bAlwaysOnTop);
-
-		ini->WriteBool("Logging", "LogToFile", Logging.bLogToFile);
-		ini->WriteInteger("Logging", "MaxUiLogLines", Logging.iMaxUiLogLines);
-
-		ini->WriteString("Contacts", "FileName", Contacts.fileName);
-
-		ini->WriteString("Audio", "OutputDevice", Audio.outputDevice);
-
-		delete ini;
-	}
-	catch (...)
-	{
-		if (ini)
+		std::ifstream ifs(asFileName.c_str());
+		std::string strConfig((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+		ifs.close();
+		bool parsingSuccessful = reader.parse( strConfig, root );
+		if ( !parsingSuccessful )
 		{
-			delete ini;
+			return 2;
 		}
-		return false;
 	}
-	return true;
+	catch(...)
+	{
+		return 1;
+	}
+
+	int maxX = GetSystemMetrics(SM_CXSCREEN);
+	/** \todo Ugly fixed taskbar margin */
+	int maxY = GetSystemMetrics(SM_CYSCREEN) - 32;
+
+	const Json::Value &frmMainJson = root["frmMain"];
+	frmMain.iWidth = frmMainJson.get("AppWidth", 350).asInt();
+	frmMain.iHeight = frmMainJson.get("AppHeight", 300).asInt();
+	if (frmMain.iWidth < 250 || frmMain.iWidth > maxX + 20)
+	{
+		frmMain.iWidth = 250;
+	}
+	if (frmMain.iHeight < 200 || frmMain.iHeight > maxY + 20)
+	{
+		frmMain.iHeight = 200;
+	}
+	frmMain.iPosX = frmMainJson.get("AppPositionX", 30).asInt();
+	frmMain.iPosY = frmMainJson.get("AppPositionY", 30).asInt();
+	if (frmMain.iPosX < 0)
+		frmMain.iPosX = 0;
+	if (frmMain.iPosY < 0)
+		frmMain.iPosY = 0;
+	if (frmMain.iPosX + frmMain.iWidth > maxX)
+		frmMain.iPosX = maxX - frmMain.iWidth;
+	if (frmMain.iPosY + frmMain.iHeight > maxY)
+		frmMain.iPosY = maxY - frmMain.iHeight;
+	frmMain.bWindowMaximized = frmMainJson.get("Maximized", false).asBool();
+	frmMain.bAlwaysOnTop = frmMainJson.get("AlwaysOnTop", false).asBool();
+
+	const Json::Value &LoggingJson = root["Logging"];
+	Logging.bLogToFile = LoggingJson.get("LogToFile", false).asBool();
+	Logging.bFlush = LoggingJson.get("Flush", Logging.bFlush).asBool();
+	Logging.iMaxFileSize = LoggingJson.get("MaxFileSize", Logging.iMaxFileSize).asInt();
+	if (Logging.iMaxFileSize < Settings::_Logging::MIN_MAX_FILE_SIZE || Logging.iMaxFileSize > Settings::_Logging::MIN_MAX_FILE_SIZE)
+	{
+		Logging.iMaxFileSize = Settings::_Logging::DEF_MAX_FILE_SIZE;
+	}
+	Logging.iMaxUiLogLines = LoggingJson.get("MaxUiLogLines", 5000).asInt();
+
+	{
+		const Json::Value &jv = root["Contacts"];
+		jv.getAString("FileName", Contacts.fileName);
+	}
+
+	{
+		const Json::Value &jv = root["Audio"];
+		jv.getAString("OutputDevice", Audio.outputDevice);
+	}
+
+	{
+		const Json::Value &jv = root["Transcription"];
+		jv.getAString("WhisperExe", Transcription.whisperExe);
+		jv.getAString("Model", Transcription.model);
+		jv.getAString("Language", Transcription.language);
+		jv.getUInt("ThreadCount", Transcription.threadCount);
+	}
+
+	return 0;
+}
+
+int Settings::Write(AnsiString asFileName)
+{
+	Json::Value root;
+	Json::StyledWriter writer;
+
+	root["frmMain"]["AppWidth"] = frmMain.iWidth;
+	root["frmMain"]["AppHeight"] = frmMain.iHeight;
+	root["frmMain"]["AppPositionX"] = frmMain.iPosX;
+	root["frmMain"]["AppPositionY"] = frmMain.iPosY;
+	root["frmMain"]["Maximized"] = frmMain.bWindowMaximized;
+	root["frmMain"]["AlwaysOnTop"] = frmMain.bAlwaysOnTop;
+
+	root["Logging"]["LogToFile"] = Logging.bLogToFile;
+	root["Logging"]["Flush"] = Logging.bFlush;
+	root["Logging"]["MaxFileSize"] = Logging.iMaxFileSize;
+	root["Logging"]["MaxUiLogLines"] = Logging.iMaxUiLogLines;
+
+	{
+		Json::Value &jv = root["Contacts"];
+		jv["FileName"] = Contacts.fileName;
+	}
+
+	{
+		Json::Value &jv = root["Audio"];
+		jv["OutputDevice"] = Audio.outputDevice;
+	}
+
+	{
+		Json::Value &jv = root["Transcription"];
+		jv["WhisperExe"] = Transcription.whisperExe;
+		jv["Model"] = Transcription.model;
+		jv["Language"] = Transcription.language;
+		jv["ThreadCount"] = Transcription.threadCount;
+	}
+
+	std::string outputConfig = writer.write( root );
+
+	try
+	{
+		std::ofstream ofs(asFileName.c_str());
+		ofs << outputConfig;
+		ofs.close();
+	}
+	catch(...)
+	{
+    	return 1;
+	}
+
+	return 0;
 
 }

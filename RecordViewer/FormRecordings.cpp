@@ -617,8 +617,10 @@ void __fastcall TfrmRecordings::miTranscribeFileClick(TObject *Sender)
 	{
 		AnsiString filename = records_filtered[lvRecords->Selected->Index].asFilename;
 		int TODO__PREVENT_MULTIPLE_RUN_SAME_TIME;
-		xxx
-		transcription.Transcribe(filename, AnsiString whisperExe, AnsiString model, AnsiString language, unsigned int threadCount);
+
+		transcription.Transcribe(filename,
+			appSettings.Transcription.whisperExe, appSettings.Transcription.model,
+			appSettings.Transcription.language, appSettings.Transcription.threadCount);
 	}
 }
 //---------------------------------------------------------------------------
