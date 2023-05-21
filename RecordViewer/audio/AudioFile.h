@@ -13,6 +13,7 @@ protected:
 	bool eof;
 	int64_t totalPcmSamples;
 	int64_t pcmPosition;
+	AnsiString fileName;
 public:
 	AudioFile(void):
 		eof(false),
@@ -41,6 +42,10 @@ public:
 		return pcmPosition;
 	}
 	virtual int SeekToPcmPosition(int64_t pos) = 0;
+	AnsiString GetFileName(void) const
+	{
+    	return fileName;
+	}
 };
 
 #endif

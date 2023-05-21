@@ -25,7 +25,8 @@ AudioFileOggOpus::~AudioFileOggOpus(void)
 
 int AudioFileOggOpus::Open(AnsiString fileName)
 {
-    eof = false;
+    this->fileName = fileName;
+	eof = false;
 	if (oggOpusFile) {
 		op_free(oggOpusFile);
 		oggOpusFile = NULL;

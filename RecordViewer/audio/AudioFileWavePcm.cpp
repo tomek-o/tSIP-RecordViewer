@@ -155,7 +155,8 @@ AudioFileWavePcm::~AudioFileWavePcm(void)
 
 int AudioFileWavePcm::Open(AnsiString fileName)
 {
-    eof = false;
+    this->fileName = fileName;
+	eof = false;
 	if (file)
 	{
 		fclose(file);

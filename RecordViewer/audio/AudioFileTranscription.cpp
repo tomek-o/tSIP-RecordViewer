@@ -35,7 +35,6 @@ int AudioFileTranscription::Process(void)
 {
 	int status = 0;
 	assert(file);
-	AnsiString whisperSourceFileName = fileName;
 
 	if (file->GetRealChannelsCount() != 1 || file->GetChannelsCount() != 1 || file->GetSampleRate() != WHISPER_REQUIRED_SAMPLING)
 	{
@@ -43,12 +42,28 @@ int AudioFileTranscription::Process(void)
 		AudioFileConverter converter;
 		if (file->GetRealChannelsCount() == 1)
 		{
-			whisperSourceFileName = ExtractFileDir(Application->ExeName) + "\\tmp_mono.wav";
+			AnsiString whisperSourceFileName = ExtractFileDir(Application->ExeName) + "\\tmp_mono.wav";
 			status = converter.Convert(file, whisperSourceFileName, AudioFileConverter::OUTPUT_CHANNEL_MONO);
+			if (status == 0)
+			{
+				status =
+			}
 		}
 		else
 		{
-        	int TODO__STEREO_WAV_FILE;
+			AnsiString whisperSourceFileNameL = ExtractFileDir(Application->ExeName) + "\\tmp_L.wav";
+			status = converter.Convert(file, whisperSourceFileNameL, AudioFileConverter::OUTPUT_CHANNEL_L);
+			if (status == 0)
+			{
+				status =
+			}
+
+			AnsiString whisperSourceFileNameR = ExtractFileDir(Application->ExeName) + "\\tmp_R.wav";
+			status = converter.Convert(file, whisperSourceFileNameR, AudioFileConverter::OUTPUT_CHANNEL_R);
+			if (status == 0)
+			{
+				status =
+			}
 		}
 	}
 	else
@@ -56,7 +71,8 @@ int AudioFileTranscription::Process(void)
     	LOG("No resampling / downmixing needed for file");
 	}
 
-    delete file;
+    file->Close();
+	delete file;
 
 	running = false;
 	return status;
@@ -93,8 +109,9 @@ int AudioFileTranscription::Transcribe(AnsiString fileName, AnsiString whisperEx
 	else
 	{
 		running = true;
+
 		DWORD dwtid;
-		HANDLE thread = CreateThread(NULL, 0, TranscriptionThreadProc, this, THREAD_PRIORITY_BELOW_NORMAL, &dwtid);
+		HANDLE thread = CreateThread(NULL, 0, TranscriptionThreadProc, this, THREAD_PRIORITY_NORMAL, &dwtid);
 		if (thread == NULL)
 		{
 			running = false;

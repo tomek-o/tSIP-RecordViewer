@@ -100,6 +100,8 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 	int sourceChannels = file->GetChannelsCount();
 	int realSourceChannels = file->GetRealChannelsCount();
 
+	LOG("Converting %s to %s", file->GetFileName().c_str(), outputFileName.c_str());
+
 	if (sourceChannels != 1 && sourceChannels != 2)
 	{
 		LOG(PROMPT"Unhandled source channels number = %d", sourceChannels);
@@ -139,7 +141,7 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 	else
 	{
 		int TODO__VERIFY_OUTPUT_BYTES_NUMBER_FROM_RESAMPLING;
-		outputBytes = static_cast<unsigned int>(static_cast<int64_t>(file->GetTotalPcmSamples()) * OUTPUT_SAMPLING / file->GetSampleRate());
+		outputBytes = static_cast<unsigned int>(static_cast<int64_t>(file->GetTotalPcmSamples()) * OUTPUT_SAMPLING / file->GetSampleRate() * sizeof(int16_t));
 	}
 	LOG(PROMPT"Expected output bytes = %u", outputBytes);
 
@@ -184,7 +186,6 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 			break;
 		}
 
-		left -= count;
 		if (count == 0)
 		{
 			LOG(PROMPT"End of source file");
@@ -195,10 +196,11 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 		if (sourceChannels == 1)
 		{
 			inputSamplesCount = count;
+			left -= inputSamplesCount;
 		}
 		else
 		{
-            // stereo -> mono
+			// stereo -> mono
 			if (count % 2)
 			{
 				status = -1;
@@ -206,6 +208,7 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 				break;
 			}
 			inputSamplesCount = count / 2;
+			left -= inputSamplesCount;
 			if (channel == OUTPUT_CHANNEL_L)
 			{
 				for (unsigned int i=0; i<inputSamplesCount; i++)
