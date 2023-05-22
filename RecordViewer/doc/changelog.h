@@ -31,4 +31,11 @@ Version 0.3
 - playback for both .wav and .ogg files
 - settings: output audio device selection
 
+
+TODO:
+	- GUI with diarization
+	- rewind audio to matching position when playing and sentence was clicked
+	- test space in whisper directories (model file, source file)
+	- use something more sensible instead of TerminateProcess
+	- option to repeat transcription for selected file(s)
 */

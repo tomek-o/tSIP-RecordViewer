@@ -7,6 +7,7 @@
 #include "AudioFile.h"
 #include "AudioFileFactory.h"
 #include "AudioFileConverter.h"
+#include "AudioFileTranscriber.h"
 #include "Log.h"
 #include <assert.h>
 #include <SysUtils.hpp>
@@ -39,30 +40,54 @@ int AudioFileTranscription::Process(void)
 	if (file->GetRealChannelsCount() != 1 || file->GetChannelsCount() != 1 || file->GetSampleRate() != WHISPER_REQUIRED_SAMPLING)
 	{
 		// needs resampling and/or converting to mono wave
-		AudioFileConverter converter;
 		if (file->GetRealChannelsCount() == 1)
 		{
 			AnsiString whisperSourceFileName = ExtractFileDir(Application->ExeName) + "\\tmp_mono.wav";
+			AudioFileConverter converter;
 			status = converter.Convert(file, whisperSourceFileName, AudioFileConverter::OUTPUT_CHANNEL_MONO);
 			if (status == 0)
 			{
-				status =
+				AudioFileTranscriber transcriber;
+				status = transcriber.Transcribe(whisperSourceFileName, whisperExe, model, language, threadCount);
+				if (status == 0)
+				{
+
+
+				}
 			}
 		}
 		else
 		{
-			AnsiString whisperSourceFileNameL = ExtractFileDir(Application->ExeName) + "\\tmp_L.wav";
-			status = converter.Convert(file, whisperSourceFileNameL, AudioFileConverter::OUTPUT_CHANNEL_L);
-			if (status == 0)
 			{
-				status =
+				AudioFileConverter converter;
+				AnsiString whisperSourceFileNameL = ExtractFileDir(Application->ExeName) + "\\tmp_L.wav";
+				status = converter.Convert(file, whisperSourceFileNameL, AudioFileConverter::OUTPUT_CHANNEL_L);
+				if (status == 0)
+				{
+					AudioFileTranscriber transcriber;
+					status = transcriber.Transcribe(whisperSourceFileNameL, whisperExe, model, language, threadCount);
+					if (status == 0)
+					{
+
+
+					}
+				}
 			}
 
-			AnsiString whisperSourceFileNameR = ExtractFileDir(Application->ExeName) + "\\tmp_R.wav";
-			status = converter.Convert(file, whisperSourceFileNameR, AudioFileConverter::OUTPUT_CHANNEL_R);
-			if (status == 0)
 			{
-				status =
+				AudioFileConverter converter;
+				AnsiString whisperSourceFileNameR = ExtractFileDir(Application->ExeName) + "\\tmp_R.wav";
+				status = converter.Convert(file, whisperSourceFileNameR, AudioFileConverter::OUTPUT_CHANNEL_R);
+				if (status == 0)
+				{
+					AudioFileTranscriber transcriber;
+					status = transcriber.Transcribe(whisperSourceFileNameR, whisperExe, model, language, threadCount);
+					if (status == 0)
+					{
+
+
+					}
+				}
 			}
 		}
 	}

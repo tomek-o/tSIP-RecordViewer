@@ -28,7 +28,6 @@
         <property category="build.config.1" name="settings.win32b" value="default"/>
         <property category="build.config.1" name="type" value="Toolset"/>
         <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
-        <property category="build.node" name="lastconfig" value="Release_Build"/>
         <property category="build.node" name="libraries" value="vclx.lib vcl.lib rtl.lib"/>
         <property category="build.node" name="name" value="RecordViewer.exe"/>
         <property category="build.node" name="packages" value="vclx;vcl;rtl;dbrtl;vcldb;dbxcds;dbexpress;xmlrtl;vclie;inet;inetdbbde;inetdbxpress;dsnap;soaprtl;bdertl;vcldbx"/>
@@ -76,6 +75,7 @@
         <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
         <property category="win32.Release_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
         <property category="win32.Release_Build.win32b.bcc32" name="option.O2.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.Q.enabled" value="1"/>
         <property category="win32.Release_Build.win32b.bcc32" name="option.k.enabled" value="0"/>
         <property category="win32.Release_Build.win32b.bcc32" name="option.r.enabled" value="1"/>
         <property category="win32.Release_Build.win32b.bcc32" name="option.vi.enabled" value="1"/>
@@ -126,6 +126,7 @@
           <property category="win32.*.win32b.bcc32" name="option.O1.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.O2.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.Od.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.Q.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.V0.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.V1.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.Vmd.enabled" value="0"/>
@@ -255,6 +256,7 @@
         <FILE FILENAME="audio\AudioFileFactory.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioFileFactory" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\AudioFileFactory.h"/>
         <FILE FILENAME="audio\AudioFileTranscription.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioFileTranscription" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\AudioFileTranscription.h"/>
         <FILE FILENAME="audio\AudioFileConverter.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioFileConverter" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\AudioFileConverter.h"/>
+        <FILE FILENAME="audio\AudioFileTranscriber.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioFileTranscriber" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\AudioFileTranscriber.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

@@ -267,6 +267,8 @@ int AudioFileWavePcm::SeekToPcmPosition(int64_t pos)
 {
 	if (file == NULL)
 		return -1;
+	LOG("Wave: seek to %u", static_cast<unsigned int>(pos));
+	eof = false;
 	return fseek(file, static_cast<long>(dataStartPosition + (pos * sizeof(int16_t) * waveFormat.channels)), SEEK_SET);
 }
 
