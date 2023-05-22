@@ -114,5 +114,25 @@ int AudioFileOggOpus::SeekToPcmPosition(int64_t pos)
 {
 	if (oggOpusFile == NULL)
 		return -1;
-	return op_pcm_seek(oggOpusFile, pos);	
+	LOG("Opus: seek to %u", static_cast<unsigned int>(pos));
+	if (eof)
+	{
+		if (oggOpusFile) {
+			op_free(oggOpusFile);
+			oggOpusFile = NULL;
+		}
+		int opRet = 0;		
+		oggOpusFile = op_open_file(fileName.c_str(), &opRet);
+		if (oggOpusFile == NULL) {
+			LOG("Failed to reopen %s as Opus/OGG, ret code = %d", fileName.c_str(), opRet);
+			return -1;
+		}
+	}
+	eof = false;
+	int status = op_pcm_seek(oggOpusFile, pos);
+	if (status != 0)
+	{
+		LOG("Opus seek failed, status = %d", status);
+	}
+	return status;
 }
