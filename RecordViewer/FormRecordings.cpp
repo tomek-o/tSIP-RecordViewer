@@ -493,14 +493,19 @@ void __fastcall TfrmRecordings::miDeleteFilesClick(TObject *Sender)
 	{
 		return;
 	}
+	std::set<int> idsToErase;
 	for (int i=lvRecords->Items->Count-1; i>=0; i--)
 	{
 		if (lvRecords->Items->Item[i]->Selected)
 		{
 			int id = records_filtered[i].id;
 			DeleteFile(records_filtered[i].asFilename);
-			records.erase(records.begin() + id);
-        }
+			idsToErase.insert(id);
+		}
+	}
+	for (std::set<int>::reverse_iterator iter = idsToErase.rbegin(); iter != idsToErase.rend(); ++iter)
+	{
+		records.erase(records.begin() + *iter);
 	}
 	Filter();
 }
