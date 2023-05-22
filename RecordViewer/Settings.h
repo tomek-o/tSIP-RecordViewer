@@ -63,7 +63,8 @@ public:
 		AnsiString language;
 		unsigned int threadCount;
 		_Transcription(void):
-			whisperExe("whisper.cpp\\whisper.exe"),
+			whisperExe("whisper.cpp\\main.exe"),
+			model("whisper.cpp\\models\\ggml-base.en.bin"),
 			threadCount(2)
 		{}
 	} Transcription;
