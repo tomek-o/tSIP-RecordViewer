@@ -256,12 +256,12 @@ int AudioFilePlayer::Play(AnsiString fileName, AnsiString audioDevice)
 	{
 		std::vector<AnsiString> devices = AudioDevicesList::Instance().winwaveDevsOut;
         bool found = false;
-		for (unsigned int i=0; i<devices.size(); i++)
+		for (unsigned int i=1 /* skipping wave mapper */; i<devices.size(); i++)
 		{
 			AnsiString devName = devices[i].c_str();
 			if (devName == audioDevice)
 			{
-				iWaveOutDev = i;
+				iWaveOutDev = i - 1;
 				found = true;
 				break;
 			}
