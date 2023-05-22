@@ -618,8 +618,19 @@ void __fastcall TfrmRecordings::miTranscribeFileClick(TObject *Sender)
 		AnsiString filename = records_filtered[lvRecords->Selected->Index].asFilename;
 		int TODO__PREVENT_MULTIPLE_RUN_SAME_TIME;
 
-		transcription.Transcribe(filename,
-			appSettings.Transcription.whisperExe, appSettings.Transcription.model,
+		AnsiString relPath;
+
+		AnsiString whisperExe = appSettings.Transcription.whisperExe;
+		relPath = ExtractFileDir(Application->ExeName) + "\\" + whisperExe;
+		if (FileExists(relPath))
+			whisperExe = relPath;
+
+		AnsiString model = appSettings.Transcription.model;
+		relPath = ExtractFileDir(Application->ExeName) + "\\" + model;
+		if (FileExists(relPath))
+			model = relPath;
+
+		transcription.Transcribe(filename, whisperExe, model,
 			appSettings.Transcription.language, appSettings.Transcription.threadCount);
 	}
 }
