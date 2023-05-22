@@ -6,6 +6,8 @@
 
 #include <System.hpp>
 #include <stdint.h>
+#include <windows.h>
+#include <mmsystem.h>
 
 class AudioFile;
 
