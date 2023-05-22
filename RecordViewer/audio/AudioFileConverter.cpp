@@ -97,10 +97,12 @@ AudioFileConverter::~AudioFileConverter(void)
 
 int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum OutputChannel channel)
 {
+	file->SeekToPcmPosition(0);
+
 	int sourceChannels = file->GetChannelsCount();
 	int realSourceChannels = file->GetRealChannelsCount();
 
-	LOG("Converting %s to %s", file->GetFileName().c_str(), outputFileName.c_str());
+	LOG("Converting %s, channel %s to %s", file->GetFileName().c_str(), GetChannelName(channel), outputFileName.c_str());
 
 	if (sourceChannels != 1 && sourceChannels != 2)
 	{
@@ -173,6 +175,8 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 	}
 
 	uint64_t left = file->GetTotalPcmSamples();
+	unsigned int totalInputSamplesCount = 0;
+	
 	while (left > 0)
 	{
 		int16_t inputBuf[2048];
@@ -186,9 +190,12 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 			break;
 		}
 
+		totalInputSamplesCount += count;
+
 		if (count == 0)
 		{
-			LOG(PROMPT"End of source file");
+			LOG(PROMPT"End of source file, got %u samples from source, %u frames missing",
+				totalInputSamplesCount, static_cast<unsigned int>(left));
 			break;
 		}
 
