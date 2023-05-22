@@ -19,6 +19,21 @@ public:
 		OUTPUT_CHANNEL_R
 	};
 
+	static const char* GetChannelName(enum OutputChannel channel)
+	{
+		switch (channel)
+		{
+		case OUTPUT_CHANNEL_MONO:
+			return "MONO";
+		case OUTPUT_CHANNEL_L:
+			return "L";
+		case OUTPUT_CHANNEL_R:
+			return "R";
+		default:
+			return "???";
+		}
+	}
+
 	AudioFileConverter(void)
 	{}
 
