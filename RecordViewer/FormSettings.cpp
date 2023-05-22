@@ -37,6 +37,18 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 		cmbMaxUiLogLines->ItemHeight = cmbMaxUiLogLines->Items->Count - 1;
 	}
 
+	edWhisperExe->Text = tmpSettings.Transcription.whisperExe;
+	edWhisperModel->Text = tmpSettings.Transcription.model;
+	edWhisperLanguage->Text = tmpSettings.Transcription.language;
+	if (tmpSettings.Transcription.threadCount > 0 && tmpSettings.Transcription.threadCount < static_cast<unsigned int>(cbWhisperThreadCount->Items->Count))
+	{
+		cbWhisperThreadCount->ItemIndex = tmpSettings.Transcription.threadCount - 1;
+	}
+	else
+	{
+    	cbWhisperThreadCount->ItemIndex = 1;
+	}
+
 	RefreshAudioDevicesList();	
 }
 //---------------------------------------------------------------------------
@@ -58,6 +70,11 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	{
 		tmpSettings.Audio.outputDevice = cbAudioOutput->Text.c_str();
 	}
+
+	tmpSettings.Transcription.whisperExe = edWhisperExe->Text;
+	tmpSettings.Transcription.model = edWhisperModel->Text;
+	tmpSettings.Transcription.language = edWhisperLanguage->Text;
+	tmpSettings.Transcription.threadCount = StrToIntDef(cbWhisperThreadCount->Text, tmpSettings.Transcription.threadCount);
 
 	*appSettings = tmpSettings;
 	this->Close();	
@@ -121,3 +138,17 @@ void TfrmSettings::RefreshAudioDevicesList(void)
 		}
 	}
 }
+void __fastcall TfrmSettings::btnSelectWhisperExeClick(TObject *Sender)
+{
+	if (openDialog->Execute())
+		edWhisperExe->Text = openDialog->FileName;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmSettings::btnSelectWhisperModelClick(TObject *Sender)
+{
+	if (openDialog->Execute())
+		edWhisperModel->Text = openDialog->FileName;
+}
+//---------------------------------------------------------------------------
+

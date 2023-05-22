@@ -4,8 +4,8 @@ object frmSettings: TfrmSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Settings'
-  ClientHeight = 251
-  ClientWidth = 366
+  ClientHeight = 286
+  ClientWidth = 459
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,46 +19,54 @@ object frmSettings: TfrmSettings
   TextHeight = 13
   object pnlBottom: TPanel
     Left = 0
-    Top = 214
-    Width = 366
+    Top = 249
+    Width = 459
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 341
+    ExplicitTop = 214
+    ExplicitWidth = 366
+    DesignSize = (
+      459
+      37)
     object btnCancel: TButton
-      Left = 282
+      Left = 375
       Top = 6
       Width = 75
       Height = 25
+      Anchors = [akTop, akRight]
       Caption = 'Cancel'
       TabOrder = 1
       OnClick = btnCancelClick
+      ExplicitLeft = 282
     end
     object btnApply: TButton
-      Left = 201
+      Left = 294
       Top = 6
       Width = 75
       Height = 25
+      Anchors = [akTop, akRight]
       Caption = 'Apply'
       TabOrder = 0
       OnClick = btnApplyClick
+      ExplicitLeft = 201
     end
   end
   object pcGeneral: TPageControl
     Left = 0
     Top = 0
-    Width = 366
-    Height = 214
-    ActivePage = tsGeneral
+    Width = 459
+    Height = 249
+    ActivePage = tsWhisperCpp
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 366
+    ExplicitHeight = 214
     object tsGeneral: TTabSheet
       Caption = 'General'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 333
-      ExplicitHeight = 0
+      ExplicitWidth = 358
+      ExplicitHeight = 186
       object chbAlwaysOnTop: TCheckBox
         Left = 3
         Top = 3
@@ -72,10 +80,8 @@ object frmSettings: TfrmSettings
     object tsAudio: TTabSheet
       Caption = 'Audio'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 333
-      ExplicitHeight = 0
+      ExplicitWidth = 358
+      ExplicitHeight = 186
       object lblAudioOutput: TLabel
         Left = 16
         Top = 11
@@ -97,17 +103,132 @@ object frmSettings: TfrmSettings
         Width = 285
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 1
+      end
+    end
+    object tsWhisperCpp: TTabSheet
+      Caption = 'S2T: whisper.cpp'
+      ImageIndex = 3
+      ExplicitWidth = 358
+      ExplicitHeight = 186
+      object lblWhisperExe: TLabel
+        Left = 3
+        Top = 6
+        Width = 169
+        Height = 13
+        Caption = 'whisper.cpp executable (main.exe)'
+      end
+      object lblWhisperModel: TLabel
+        Left = 3
+        Top = 30
+        Width = 118
+        Height = 13
+        Caption = 'Model file (ggml-XXX.bin)'
+      end
+      object lblWhisperLanguage: TLabel
+        Left = 3
+        Top = 54
+        Width = 160
+        Height = 13
+        Caption = 'Language code (optional, e.g. pl)'
+      end
+      object lblWhisperThreadCount: TLabel
+        Left = 3
+        Top = 78
+        Width = 64
+        Height = 13
+        Caption = 'Thread count'
+      end
+      object edWhisperExe: TEdit
+        Left = 178
+        Top = 3
+        Width = 239
+        Height = 21
+        TabOrder = 0
+      end
+      object btnSelectWhisperExe: TButton
+        Left = 418
+        Top = 3
+        Width = 25
+        Height = 21
+        Caption = '...'
+        TabOrder = 1
+        OnClick = btnSelectWhisperExeClick
+      end
+      object edWhisperModel: TEdit
+        Left = 178
+        Top = 27
+        Width = 239
+        Height = 21
+        TabOrder = 2
+      end
+      object btnSelectWhisperModel: TButton
+        Left = 418
+        Top = 27
+        Width = 25
+        Height = 21
+        Caption = '...'
+        TabOrder = 3
+        OnClick = btnSelectWhisperModelClick
+      end
+      object edWhisperLanguage: TEdit
+        Left = 178
+        Top = 51
+        Width = 71
+        Height = 21
+        TabOrder = 4
+      end
+      object cbWhisperThreadCount: TComboBox
+        Left = 178
+        Top = 75
+        Width = 57
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        ItemIndex = 2
+        TabOrder = 5
+        Text = '3'
+        Items.Strings = (
+          '1'
+          '2'
+          '3'
+          '4'
+          '5'
+          '6'
+          '7'
+          '8'
+          '9'
+          '10'
+          '11'
+          '12'
+          '13'
+          '14'
+          '15'
+          '16'
+          '17'
+          '18'
+          '19'
+          '20'
+          '21'
+          '22'
+          '23'
+          '24'
+          '25'
+          '26'
+          '27'
+          '28'
+          '29'
+          '30'
+          '31'
+          '32')
       end
     end
     object pcLogging: TTabSheet
       Caption = 'Logging'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 333
-      ExplicitHeight = 0
+      ExplicitWidth = 358
+      ExplicitHeight = 186
       object lblUiCapacity: TLabel
         Left = 5
         Top = 26
@@ -143,5 +264,9 @@ object frmSettings: TfrmSettings
         OnClick = chbAlwaysOnTopClick
       end
     end
+  end
+  object openDialog: TOpenDialog
+    Left = 8
+    Top = 176
   end
 end
