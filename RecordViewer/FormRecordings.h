@@ -16,6 +16,8 @@
 #include <vector>
 
 #include "AudioFilePlayer.h"
+#include "Record.h"
+
 //---------------------------------------------------------------------------
 class TfrmRecordings : public TForm
 {
@@ -44,6 +46,9 @@ __published:	// IDE-managed Components
 	TButton *btnPause;
 	TMenuItem *miOpenFileInDefaultPlayer;
 	TMenuItem *miTranscribeFile;
+	TTimer *tmrShowTransciption;
+	TLabel *lblTranscriptionState;
+	TMenuItem *miShowFileTranscription;
 	void __fastcall miPopupRecordsCopyClick(TObject *Sender);
 	void __fastcall lvRecordsData(TObject *Sender, TListItem *Item);
 	void __fastcall lvRecordsColumnClick(TObject *Sender, TListColumn *Column);
@@ -65,30 +70,14 @@ __published:	// IDE-managed Components
 	void __fastcall miOpenFileInDefaultPlayerClick(TObject *Sender);
 	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
 	void __fastcall miTranscribeFileClick(TObject *Sender);
+	void __fastcall tmrShowTransciptionTimer(TObject *Sender);
+	void __fastcall miShowFileTranscriptionClick(TObject *Sender);
+	void __fastcall popupRecordsPopup(TObject *Sender);
 private:	// User declarations
 	void __fastcall TrackBarMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
 	void __fastcall TrackBarMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
 
     AudioFilePlayer player;
-
-	struct S_RECORD
-	{
-        int id;		///< important for records_filtered only; mapping records_filtered to records
-		AnsiString asFilename;
-		enum DIR {
-			DIR_UNKNOWN = 0,
-			DIR_IN,
-			DIR_OUT
-		} dir;
-		AnsiString asDateTime;
-		AnsiString asNumber;
-		AnsiString asDescription;
-		int size;
-		S_RECORD(void):
-			dir(DIR_UNKNOWN),
-			size(0)
-		{}
-	};
 
 	std::vector<S_RECORD> records;
 	std::vector<S_RECORD> records_filtered;

@@ -7,6 +7,8 @@
 #include "Contacts.h"
 #include "Settings.h"
 #include "AudioFileTranscription.h"
+#include "AudioTranscriptionFileName.h"
+#include "FormTranscription.h"
 #include "common/BtnController.h"
 #include "common/TimeCounter.h"
 #include "MyTrackBar.h"
@@ -55,6 +57,8 @@ __fastcall TfrmRecordings::TfrmRecordings(TComponent* Owner)
 	btnPlay->Enabled = true;
 	btnStop->Enabled = false;
 	btnPause->Enabled = false;
+
+	lblTranscriptionState->Caption = "";
 }
 //---------------------------------------------------------------------------
 
@@ -178,7 +182,7 @@ void __fastcall TfrmRecordings::miPopupRecordsCopyClick(TObject *Sender)
 //---------------------------------------------------------------------------
 
 
-bool __fastcall TfrmRecordings::v_compare_records(const TfrmRecordings::S_RECORD& d1, const TfrmRecordings::S_RECORD& d2)
+bool __fastcall TfrmRecordings::v_compare_records(const S_RECORD& d1, const S_RECORD& d2)
 {
 	int column = frmRecordings->sorting.column;
 	bool forward = frmRecordings->sorting.forward;
@@ -388,9 +392,9 @@ void TfrmRecordings::AddDirectory(AnsiString dir)
 			pos = asFile.Pos("_");
 			if (pos > 0) {
 				asDir = asFile.SubString(1, pos-1);
-				if (asDir == "0") {
+				if (asDir == "1") {
 					record.dir = S_RECORD::DIR_IN;
-				} else if (asDir == "1") {
+				} else if (asDir == "0") {
 					record.dir = S_RECORD::DIR_OUT;
 				}
 			}
@@ -618,10 +622,16 @@ void __fastcall TfrmRecordings::FormCloseQuery(TObject *Sender, bool &CanClose)
 
 void __fastcall TfrmRecordings::miTranscribeFileClick(TObject *Sender)
 {
+	if (transcription.IsRunning())
+	{
+		MessageBox(this->Handle, "Another transcription is already running",
+			this->Caption.c_str(), MB_ICONINFORMATION);
+		return;
+	}
+
 	if (lvRecords->Selected)
 	{
 		AnsiString filename = records_filtered[lvRecords->Selected->Index].asFilename;
-		int TODO__PREVENT_MULTIPLE_RUN_SAME_TIME;
 
 		AnsiString relPath;
 
@@ -637,6 +647,45 @@ void __fastcall TfrmRecordings::miTranscribeFileClick(TObject *Sender)
 
 		transcription.Transcribe(filename, whisperExe, model,
 			appSettings.Transcription.language, appSettings.Transcription.threadCount);
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmRecordings::tmrShowTransciptionTimer(TObject *Sender)
+{
+	AnsiString text;
+	if (transcription.IsRunning())
+	{
+		text.sprintf("Transcribing %s...", ExtractFileName(transcription.GetFileName()).c_str());
+	}
+	lblTranscriptionState->Caption = text;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmRecordings::miShowFileTranscriptionClick(TObject *Sender)
+{
+	if (lvRecords->Selected)
+	{
+		const S_RECORD &record = records_filtered[lvRecords->Selected->Index];
+		TfrmTranscription *frm = new TfrmTranscription(NULL, record);
+		frm->Show();
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmRecordings::popupRecordsPopup(TObject *Sender)
+{
+	miShowFileTranscription->Enabled = false;
+
+	if (lvRecords->Selected)
+	{
+		const S_RECORD &record = records_filtered[lvRecords->Selected->Index];
+		AnsiString audioFileName = record.asFilename;
+		AnsiString fileMono = GetTranscriptionFileName(audioFileName, AUDIO_CHANNEL_MONO);
+		AnsiString fileL = GetTranscriptionFileName(audioFileName, AUDIO_CHANNEL_L);
+		AnsiString fileR = GetTranscriptionFileName(audioFileName, AUDIO_CHANNEL_R);
+		if (FileExists(fileMono) || (FileExists(fileL) && FileExists(fileR)))
+			miShowFileTranscription->Enabled = true;
 	}
 }
 //---------------------------------------------------------------------------

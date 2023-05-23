@@ -15,8 +15,6 @@ object frmRecordings: TfrmRecordings
   OldCreateOrder = False
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object pnlBottom: TPanel
@@ -54,6 +52,13 @@ object frmRecordings: TfrmRecordings
       Width = 23
       Height = 13
       Caption = '0 MB'
+    end
+    object lblTranscriptionState: TLabel
+      Left = 116
+      Top = 13
+      Width = 98
+      Height = 13
+      Caption = 'lblTranscriptionState'
     end
     object edFilter: TEdit
       Left = 38
@@ -200,6 +205,7 @@ object frmRecordings: TfrmRecordings
     OnKeyPress = lvRecordsKeyPress
   end
   object popupRecords: TPopupMenu
+    OnPopup = popupRecordsPopup
     Left = 8
     Top = 24
     object miCopyNumber: TMenuItem
@@ -217,6 +223,10 @@ object frmRecordings: TfrmRecordings
     object miTranscribeFile: TMenuItem
       Caption = 'Transcribe file'
       OnClick = miTranscribeFileClick
+    end
+    object miShowFileTranscription: TMenuItem
+      Caption = 'Show file transcription'
+      OnClick = miShowFileTranscriptionClick
     end
     object miDeleteFiles: TMenuItem
       Caption = 'Delete selected records'
@@ -360,9 +370,9 @@ object frmRecordings: TfrmRecordings
       000000000000000000000000000000000000424D3E000000000000003E000000
       2800000040000000100000000100010000000000800000000000000000000000
       000000000000000000000000FFFFFF00FFFFFFFF00000000FFFFFFFF00000000
-      FEFFFEFF00000000FEFFFC7F00000000FEFFFABF00000000FEFFF6DF00000000
-      FEFFEEEF00000000FEFFFEFF00000000FEFFFEFF00000000EEEFFEFF00000000
-      F6DFFEFF00000000FABFFEFF00000000FC7FFEFF00000000FEFFFEFF00000000
+      FEFFFEFF00000000FC7FFEFF00000000FABFFEFF00000000F6DFFEFF00000000
+      EEEFFEFF00000000FEFFFEFF00000000FEFFFEFF00000000FEFFEEEF00000000
+      FEFFF6DF00000000FEFFFABF00000000FEFFFC7F00000000FEFFFEFF00000000
       FFFFFFFF00000000FFFFFFFF0000000000000000000000000000000000000000
       000000000000}
   end
@@ -378,5 +388,11 @@ object frmRecordings: TfrmRecordings
     OnTimer = tmrStartupTimer
     Left = 8
     Top = 96
+  end
+  object tmrShowTransciption: TTimer
+    Interval = 500
+    OnTimer = tmrShowTransciptionTimer
+    Left = 8
+    Top = 160
   end
 end
