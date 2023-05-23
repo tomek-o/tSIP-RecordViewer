@@ -29,6 +29,14 @@ public:
 	}
 	int Transcribe(AnsiString fileName, AnsiString whisperExe, AnsiString model, AnsiString language, unsigned int threadCount);
 	void Stop(void);
+	bool IsRunning(void) const
+	{
+		return running;
+	}
+	AnsiString GetFileName(void) const
+	{
+    	return fileName;
+	}
 };
 
 #endif

@@ -8,6 +8,7 @@
 #include "AudioFileFactory.h"
 #include "AudioFileConverter.h"
 #include "AudioFileTranscriber.h"
+#include "AudioTranscriptionFileName.h"
 #include "Log.h"
 #include <assert.h>
 #include <SysUtils.hpp>
@@ -19,7 +20,59 @@
 
 namespace
 {
-	enum { WHISPER_REQUIRED_SAMPLING = 16000 };
+
+enum { WHISPER_REQUIRED_SAMPLING = 16000 };
+
+int CreateTranscription(AudioFile *file, AnsiString fileName, AudioFileChannel channel,
+	AnsiString whisperExe, AnsiString model, AnsiString language, unsigned int threadCount)
+{
+	AnsiString whisperSourceFileName = ExtractFileDir(Application->ExeName) + "\\tmp_" + GetAudioFileChannelName(channel) + ".wav";
+	AudioFileConverter converter;
+	int status = converter.Convert(file, whisperSourceFileName, channel);
+	if (status == 0)
+	{
+		AudioFileTranscriber transcriber;
+		status = transcriber.Transcribe(whisperSourceFileName, whisperExe, model, language, threadCount);
+		if (status == 0)
+		{
+			AnsiString src = whisperSourceFileName + ".json";
+			AnsiString dest = GetTranscriptionFileName(fileName, channel);
+			if (MoveFile(src.c_str(), dest.c_str()))
+			{
+
+			}
+			else
+			{
+				LOG("Failed to move json file to %s", dest.c_str());
+				return -1;
+			}
+		}
+	}
+	return status;
+}
+
+int CreateTranscriptionWithoutConversion(AudioFile *file, AnsiString fileName,
+	AnsiString whisperExe, AnsiString model, AnsiString language, unsigned int threadCount)
+{
+	AudioFileTranscriber transcriber;
+	int status = transcriber.Transcribe(fileName, whisperExe, model, language, threadCount);
+	if (status == 0)
+	{
+		AnsiString src = fileName + ".json";
+		AnsiString dest = GetTranscriptionFileName(fileName, AUDIO_CHANNEL_MONO);
+		if (MoveFile(src.c_str(), dest.c_str()))
+		{
+
+		}
+		else
+		{
+			LOG("Failed to move json file to %s", dest.c_str());
+			return -1;
+		}
+	}
+	return status;
+}
+
 }
 
 
@@ -42,58 +95,18 @@ int AudioFileTranscription::Process(void)
 		// needs resampling and/or converting to mono wave
 		if (file->GetRealChannelsCount() == 1)
 		{
-			AnsiString whisperSourceFileName = ExtractFileDir(Application->ExeName) + "\\tmp_mono.wav";
-			AudioFileConverter converter;
-			status = converter.Convert(file, whisperSourceFileName, AudioFileConverter::OUTPUT_CHANNEL_MONO);
-			if (status == 0)
-			{
-				AudioFileTranscriber transcriber;
-				status = transcriber.Transcribe(whisperSourceFileName, whisperExe, model, language, threadCount);
-				if (status == 0)
-				{
-
-
-				}
-			}
+			status = CreateTranscription(file, fileName, AUDIO_CHANNEL_MONO, whisperExe, model, language, threadCount);
 		}
 		else
 		{
-			{
-				AudioFileConverter converter;
-				AnsiString whisperSourceFileNameL = ExtractFileDir(Application->ExeName) + "\\tmp_L.wav";
-				status = converter.Convert(file, whisperSourceFileNameL, AudioFileConverter::OUTPUT_CHANNEL_L);
-				if (status == 0)
-				{
-					AudioFileTranscriber transcriber;
-					status = transcriber.Transcribe(whisperSourceFileNameL, whisperExe, model, language, threadCount);
-					if (status == 0)
-					{
-
-
-					}
-				}
-			}
-
-			{
-				AudioFileConverter converter;
-				AnsiString whisperSourceFileNameR = ExtractFileDir(Application->ExeName) + "\\tmp_R.wav";
-				status = converter.Convert(file, whisperSourceFileNameR, AudioFileConverter::OUTPUT_CHANNEL_R);
-				if (status == 0)
-				{
-					AudioFileTranscriber transcriber;
-					status = transcriber.Transcribe(whisperSourceFileNameR, whisperExe, model, language, threadCount);
-					if (status == 0)
-					{
-
-
-					}
-				}
-			}
+			status |= CreateTranscription(file, fileName, AUDIO_CHANNEL_L, whisperExe, model, language, threadCount);
+			status |= CreateTranscription(file, fileName, AUDIO_CHANNEL_R, whisperExe, model, language, threadCount);
 		}
 	}
 	else
 	{
-    	LOG("No resampling / downmixing needed for file");
+		LOG("No resampling / channel separation is needed for the file");
+		status = CreateTranscriptionWithoutConversion(file, fileName, whisperExe, model, language, threadCount);
 	}
 
     file->Close();

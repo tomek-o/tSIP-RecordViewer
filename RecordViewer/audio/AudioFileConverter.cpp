@@ -95,14 +95,14 @@ AudioFileConverter::~AudioFileConverter(void)
 }
 
 
-int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum OutputChannel channel)
+int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum AudioFileChannel channel)
 {
 	file->SeekToPcmPosition(0);
 
 	int sourceChannels = file->GetChannelsCount();
 	int realSourceChannels = file->GetRealChannelsCount();
 
-	LOG("Converting %s, channel %s to %s", file->GetFileName().c_str(), GetChannelName(channel), outputFileName.c_str());
+	LOG("Converting %s, channel %s to %s", file->GetFileName().c_str(), GetAudioFileChannelName(channel), outputFileName.c_str());
 
 	if (sourceChannels != 1 && sourceChannels != 2)
 	{
@@ -116,13 +116,13 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 		return -1;
 	}
 
-	if (channel == OUTPUT_CHANNEL_MONO && realSourceChannels != 1)
+	if (channel == AUDIO_CHANNEL_MONO && realSourceChannels != 1)
 	{
 		LOG(PROMPT"Unexpected: mono output requestted for stereo file");
 		return -1;
 	}
 
-	if ((channel == OUTPUT_CHANNEL_L || channel == OUTPUT_CHANNEL_R) && realSourceChannels != 2)
+	if ((channel == AUDIO_CHANNEL_L || channel == AUDIO_CHANNEL_R) && realSourceChannels != 2)
 	{
 		LOG(PROMPT"Unexpected: L/R output requestted for mono file");
 		return -1;
@@ -168,10 +168,10 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 
 	}
 
-	if (channel == OUTPUT_CHANNEL_MONO && realSourceChannels == 1 && sourceChannels == 2)
+	if (channel == AUDIO_CHANNEL_MONO && realSourceChannels == 1 && sourceChannels == 2)
 	{
 		// Opus: 2 channel API, single channel data
-		channel = OUTPUT_CHANNEL_L;
+		channel = AUDIO_CHANNEL_L;
 	}
 
 	uint64_t left = file->GetTotalPcmSamples();
@@ -216,7 +216,7 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 			}
 			inputSamplesCount = count / 2;
 			left -= inputSamplesCount;
-			if (channel == OUTPUT_CHANNEL_L)
+			if (channel == AUDIO_CHANNEL_L)
 			{
 				for (unsigned int i=0; i<inputSamplesCount; i++)
 				{

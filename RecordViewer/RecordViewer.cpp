@@ -8,6 +8,7 @@ USEFORM("FormSettings.cpp", frmSettings);
 USEFORM("FormAbout.cpp", frmAbout);
 USEFORM("LogUnit.cpp", frmLog);
 USEFORM("FormRecordings.cpp", frmRecordings);
+USEFORM("FormTranscription.cpp", frmTranscription);
 //---------------------------------------------------------------------------
 #pragma link "common.lib"
 #pragma link "jsoncpp.lib"

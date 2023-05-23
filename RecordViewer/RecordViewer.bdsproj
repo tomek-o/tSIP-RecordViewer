@@ -257,6 +257,11 @@
         <FILE FILENAME="audio\AudioFileTranscription.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioFileTranscription" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\AudioFileTranscription.h"/>
         <FILE FILENAME="audio\AudioFileConverter.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioFileConverter" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\AudioFileConverter.h"/>
         <FILE FILENAME="audio\AudioFileTranscriber.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioFileTranscriber" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\AudioFileTranscriber.h"/>
+        <FILE FILENAME="FormTranscription.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormTranscription" FORMNAME="frmTranscription" DESIGNCLASS="" ADDITIONAL="FormTranscription.h"/>
+        <FILE FILENAME="Record.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Record" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Record.h"/>
+        <FILE FILENAME="audio\AudioFileChannel.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioFileChannel" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\AudioFileChannel.h"/>
+        <FILE FILENAME="audio\AudioTranscriptionFileName.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioTranscriptionFileName" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\AudioTranscriptionFileName.h"/>
+        <FILE FILENAME="audio\Transcription.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Transcription" FORMNAME="" DESIGNCLASS="" ADDITIONAL="audio\Transcription.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
