@@ -25,8 +25,6 @@ object frmSettings: TfrmSettings
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitTop = 214
-    ExplicitWidth = 366
     DesignSize = (
       459
       37)
@@ -39,7 +37,6 @@ object frmSettings: TfrmSettings
       Caption = 'Cancel'
       TabOrder = 1
       OnClick = btnCancelClick
-      ExplicitLeft = 282
     end
     object btnApply: TButton
       Left = 294
@@ -50,7 +47,6 @@ object frmSettings: TfrmSettings
       Caption = 'Apply'
       TabOrder = 0
       OnClick = btnApplyClick
-      ExplicitLeft = 201
     end
   end
   object pcGeneral: TPageControl
@@ -61,12 +57,8 @@ object frmSettings: TfrmSettings
     ActivePage = tsWhisperCpp
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 366
-    ExplicitHeight = 214
     object tsGeneral: TTabSheet
       Caption = 'General'
-      ExplicitWidth = 358
-      ExplicitHeight = 186
       object chbAlwaysOnTop: TCheckBox
         Left = 3
         Top = 3
@@ -80,8 +72,6 @@ object frmSettings: TfrmSettings
     object tsAudio: TTabSheet
       Caption = 'Audio'
       ImageIndex = 2
-      ExplicitWidth = 358
-      ExplicitHeight = 186
       object lblAudioOutput: TLabel
         Left = 16
         Top = 11
@@ -110,8 +100,6 @@ object frmSettings: TfrmSettings
     object tsWhisperCpp: TTabSheet
       Caption = 'S2T: whisper.cpp'
       ImageIndex = 3
-      ExplicitWidth = 358
-      ExplicitHeight = 186
       object lblWhisperExe: TLabel
         Left = 3
         Top = 6
@@ -139,6 +127,13 @@ object frmSettings: TfrmSettings
         Width = 64
         Height = 13
         Caption = 'Thread count'
+      end
+      object lblPathsInfo: TLabel
+        Left = 3
+        Top = 120
+        Width = 254
+        Height = 13
+        Caption = 'Note: application tries to treat paths as relative first.'
       end
       object edWhisperExe: TEdit
         Left = 178
@@ -227,8 +222,6 @@ object frmSettings: TfrmSettings
     object pcLogging: TTabSheet
       Caption = 'Logging'
       ImageIndex = 1
-      ExplicitWidth = 358
-      ExplicitHeight = 186
       object lblUiCapacity: TLabel
         Left = 5
         Top = 26
