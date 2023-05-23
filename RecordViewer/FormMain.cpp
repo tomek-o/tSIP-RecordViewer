@@ -7,6 +7,7 @@
 #include "FormAbout.h"
 #include "FormSettings.h"
 #include "FormRecordings.h"
+#include "audio/AudioDevicesList.h"
 #include "LogUnit.h"
 #include "Log.h"
 
@@ -23,6 +24,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	frmRecordings = new TfrmRecordings(this);
 	frmRecordings->Parent = this;
 	frmRecordings->Visible = true;
+	AudioDevicesList::Instance().Refresh();
 }
 //---------------------------------------------------------------------------
 void __fastcall TfrmMain::FormCreate(TObject *Sender)
