@@ -44,7 +44,5 @@ TODO:
 	- full text search for all transcriptions: Tools / Browse transcriptions
 	- rewind audio to matching position when playing and sentence was clicked
 	- test space in whisper directories (model file, source file)
-	- allow to stop transcription process
-	- use something more sensible instead of TerminateProcess?
 	- optimize for large number of recordings
 */
