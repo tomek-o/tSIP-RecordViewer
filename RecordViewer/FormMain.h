@@ -35,6 +35,8 @@ __published:	// IDE-managed Components
 	TAction *actShowLog;
 	TFileExit *actFileExit;
 	TMenuItem *Exit1;
+	TMenuItem *miTools;
+	TMenuItem *miStopTranscribing;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
 	void __fastcall actShowAboutExecute(TObject *Sender);
@@ -42,6 +44,7 @@ __published:	// IDE-managed Components
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall actShowLogExecute(TObject *Sender);
+	void __fastcall miStopTranscribingClick(TObject *Sender);
 private:	// User declarations
 
 public:		// User declarations

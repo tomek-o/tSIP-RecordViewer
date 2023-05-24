@@ -24,14 +24,19 @@ namespace
 enum { WHISPER_REQUIRED_SAMPLING = 16000 };
 
 int CreateTranscription(AudioFile *file, AnsiString fileName, AudioFileChannel channel,
-	AnsiString whisperExe, AnsiString model, AnsiString language, unsigned int threadCount)
+	AnsiString whisperExe, AnsiString model, AnsiString language, unsigned int threadCount,
+	HANDLE &hProcess, bool &stopRequest)
 {
 	AnsiString whisperSourceFileName = ExtractFileDir(Application->ExeName) + "\\tmp_" + GetAudioFileChannelName(channel) + ".wav";
 	AudioFileConverter converter;
-	int status = converter.Convert(file, whisperSourceFileName, channel);
+	int status = converter.Convert(file, whisperSourceFileName, channel, stopRequest);
+	if (stopRequest)
+	{
+    	status = -1;
+	}
 	if (status == 0)
 	{
-		AudioFileTranscriber transcriber;
+		AudioFileTranscriber transcriber(hProcess);
 		status = transcriber.Transcribe(whisperSourceFileName, whisperExe, model, language, threadCount);
 		if (status == 0)
 		{
@@ -44,7 +49,7 @@ int CreateTranscription(AudioFile *file, AnsiString fileName, AudioFileChannel c
 			else
 			{
 				LOG("Failed to move json file to %s", dest.c_str());
-				return -1;
+				status = -1;
 			}
 		}
 	}
@@ -52,9 +57,10 @@ int CreateTranscription(AudioFile *file, AnsiString fileName, AudioFileChannel c
 }
 
 int CreateTranscriptionWithoutConversion(AudioFile *file, AnsiString fileName,
-	AnsiString whisperExe, AnsiString model, AnsiString language, unsigned int threadCount)
+	AnsiString whisperExe, AnsiString model, AnsiString language, unsigned int threadCount,
+	HANDLE &hProcess, bool &stopRequest)
 {
-	AudioFileTranscriber transcriber;
+	AudioFileTranscriber transcriber(hProcess);
 	int status = transcriber.Transcribe(fileName, whisperExe, model, language, threadCount);
 	if (status == 0)
 	{
@@ -95,18 +101,24 @@ int AudioFileTranscription::Process(void)
 		// needs resampling and/or converting to mono wave
 		if (file->GetRealChannelsCount() == 1)
 		{
-			status = CreateTranscription(file, fileName, AUDIO_CHANNEL_MONO, whisperExe, model, language, threadCount);
+			if (stopRequest == false)
+				status = CreateTranscription(file, fileName, AUDIO_CHANNEL_MONO, whisperExe, model, language, threadCount, hProcess, stopRequest);
 		}
 		else
 		{
-			status |= CreateTranscription(file, fileName, AUDIO_CHANNEL_L, whisperExe, model, language, threadCount);
-			status |= CreateTranscription(file, fileName, AUDIO_CHANNEL_R, whisperExe, model, language, threadCount);
+			if (stopRequest == false)
+				status |= CreateTranscription(file, fileName, AUDIO_CHANNEL_L, whisperExe, model, language, threadCount, hProcess, stopRequest);
+			if (stopRequest == false)
+				status |= CreateTranscription(file, fileName, AUDIO_CHANNEL_R, whisperExe, model, language, threadCount, hProcess, stopRequest);
 		}
 	}
 	else
 	{
-		LOG("No resampling / channel separation is needed for the file");
-		status = CreateTranscriptionWithoutConversion(file, fileName, whisperExe, model, language, threadCount);
+		if (stopRequest == false)
+		{
+			LOG("No resampling / channel separation is needed for the file");
+			status = CreateTranscriptionWithoutConversion(file, fileName, whisperExe, model, language, threadCount, hProcess, stopRequest);
+		}
 	}
 
     file->Close();
@@ -125,6 +137,8 @@ int AudioFileTranscription::Transcribe(AnsiString fileName, AnsiString whisperEx
 		LOG("Transcription already running");
 		return -1;
 	}
+
+	stopRequest = false;
 
 	this->fileName = fileName;
 	this->whisperExe = whisperExe;
@@ -163,5 +177,9 @@ int AudioFileTranscription::Transcribe(AnsiString fileName, AnsiString whisperEx
 
 void AudioFileTranscription::Stop(void)
 {
-
+	stopRequest = true;
+	if (hProcess != NULL)
+	{
+		TerminateProcess(hProcess, -1);
+	}	
 }

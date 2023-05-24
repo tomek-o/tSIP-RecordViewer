@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
-  <PersonalityInfo>
-    <Option>
-      <Option Name="Personality">CPlusPlusBuilder.Personality</Option>
-      <Option Name="ProjectType">CppStaticLibrary</Option>
-      <Option Name="Version">1.0</Option>
-      <Option Name="GUID">{ACAF0FD5-CE08-44C4-981B-CB97838222AD}</Option>
-    </Option>
-  </PersonalityInfo>
-  <CPlusPlusBuilder.Personality>
-    <Source>
-      <Source Name="MainSource">libopusfile.cpp</Source>
-    </Source>
-    <BCBPROJECT>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">CPlusPlusBuilder.Personality</Option>
+			<Option Name="ProjectType">CppStaticLibrary</Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{ACAF0FD5-CE08-44C4-981B-CB97838222AD}</Option>
+		</Option>
+	</PersonalityInfo>
+	<CPlusPlusBuilder.Personality>
+		<Source>
+			<Source Name="MainSource">libopusfile.cpp</Source>
+		</Source>
+		<BCBPROJECT>
       <project version="10.0">
         <property category="build.config" name="active" value="0"/>
         <property category="build.config" name="count" value="1"/>
@@ -28,6 +28,7 @@
         <property category="build.config.1" name="settings.win32b" value="default"/>
         <property category="build.config.1" name="type" value="Toolset"/>
         <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
+        <property category="build.node" name="lastconfig" value="Debug_Build"/>
         <property category="build.node" name="libraries" value="vcl.lib rtl.lib"/>
         <property category="build.node" name="name" value="libopusfile.lib"/>
         <property category="build.node" name="packages" value="vclx;vcl;rtl;dbrtl;vcldb;dbxcds;dbexpress;xmlrtl;vclie;inet;inetdbbde;inetdbxpress;dsnap;soaprtl;adortl;bdertl;vcldbx"/>
@@ -50,7 +51,7 @@
         <property category="win32.Debug_Build.win32b.bcc32" name="option.k.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.r.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.v.enabled" value="1"/>
-        <property category="win32.Debug_Build.win32b.bcc32" name="option.vG.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.vG.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.vi.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.y.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.dcc32" name="option.$D.enabled" value="1"/>
@@ -155,15 +156,15 @@
       </project>
       <FILELIST>
         <FILE FILENAME="libopusfile.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="libopusfile" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="src\internal.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="src\internal.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="src\http.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="http" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="src\info.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="info" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="src\internal.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="internal" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="src\opusfile.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="opusfile" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="src\stream.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stream" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="src\wincerts.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="wincerts" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="src\winerrno.h" CONTAINERID="" LOCALCOMMAND=""/>
-        <FILE FILENAME="include\opusfile.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="src\winerrno.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="include\opusfile.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -220,6 +221,6 @@
         </Linker>
       </IDEOPTIONS>
     </BCBPROJECT>
-    <buildevents/>
-  </CPlusPlusBuilder.Personality>
+		<buildevents/>
+	</CPlusPlusBuilder.Personality>
 </BorlandProject>

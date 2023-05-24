@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
-  <PersonalityInfo>
-    <Option>
-      <Option Name="Personality">CPlusPlusBuilder.Personality</Option>
-      <Option Name="ProjectType">CppStaticLibrary</Option>
-      <Option Name="Version">1.0</Option>
-      <Option Name="GUID">{4BE138CB-9F31-455E-9BED-15C7471AD0F9}</Option>
-    </Option>
-  </PersonalityInfo>
-  <CPlusPlusBuilder.Personality>
-    <Source>
-      <Source Name="MainSource">ogg.cpp</Source>
-    </Source>
-    <BCBPROJECT>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">CPlusPlusBuilder.Personality</Option>
+			<Option Name="ProjectType">CppStaticLibrary</Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{4BE138CB-9F31-455E-9BED-15C7471AD0F9}</Option>
+		</Option>
+	</PersonalityInfo>
+	<CPlusPlusBuilder.Personality>
+		<Source>
+			<Source Name="MainSource">ogg.cpp</Source>
+		</Source>
+		<BCBPROJECT>
       <project version="10.0">
         <property category="build.config" name="active" value="0"/>
         <property category="build.config" name="count" value="1"/>
@@ -28,6 +28,7 @@
         <property category="build.config.1" name="settings.win32b" value="default"/>
         <property category="build.config.1" name="type" value="Toolset"/>
         <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
+        <property category="build.node" name="lastconfig" value="Release_Build"/>
         <property category="build.node" name="libraries" value="vcl.lib rtl.lib"/>
         <property category="build.node" name="name" value="ogg.lib"/>
         <property category="build.node" name="packages" value="vclx;vcl;rtl;dbrtl;vcldb;dbxcds;dbexpress;xmlrtl;vclie;inet;inetdbbde;inetdbxpress;dsnap;soaprtl;adortl;bdertl;vcldbx"/>
@@ -43,7 +44,6 @@
         <property category="win32.*.win32b.tasm32" name="param.listfile.merge" value="1"/>
         <property category="win32.*.win32b.tasm32" name="param.objfile.merge" value="1"/>
         <property category="win32.*.win32b.tasm32" name="param.xreffile.merge" value="1"/>
-        <property category="win32.Debug_Build.win32b.bcc32" name="option.6.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.1" value="_DEBUG"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
@@ -51,7 +51,7 @@
         <property category="win32.Debug_Build.win32b.bcc32" name="option.k.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.r.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.v.enabled" value="1"/>
-        <property category="win32.Debug_Build.win32b.bcc32" name="option.vG.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.vG.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.vi.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.y.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.dcc32" name="option.$D.enabled" value="1"/>
@@ -156,8 +156,8 @@
         <FILE FILENAME="ogg.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ogg" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="src\bitwise.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bitwise" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="src\framing.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="framing" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="include\ogg\ogg.h" CONTAINERID="" LOCALCOMMAND=""/>
-        <FILE FILENAME="include\ogg\os_types.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="include\ogg\ogg.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="include\ogg\os_types.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -214,6 +214,6 @@
         </Linker>
       </IDEOPTIONS>
     </BCBPROJECT>
-    <buildevents/>
-  </CPlusPlusBuilder.Personality>
+		<buildevents/>
+	</CPlusPlusBuilder.Personality>
 </BorlandProject>

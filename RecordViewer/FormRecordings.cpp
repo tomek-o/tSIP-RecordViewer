@@ -695,3 +695,8 @@ void __fastcall TfrmRecordings::popupRecordsPopup(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void TfrmRecordings::StopTranscribing(void)
+{
+	transcription.Stop();
+}
+

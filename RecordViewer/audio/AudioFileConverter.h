@@ -21,7 +21,7 @@ public:
 
 	/** \brief Convert mono file or one of the stereo file channels to new mono L16, 16ksps wave file
 	*/
-	int Convert(AudioFile *file, AnsiString outputFileName, enum AudioFileChannel channel);
+	int Convert(AudioFile *file, AnsiString outputFileName, enum AudioFileChannel channel, bool &stopRequest);
 };
 
 #endif

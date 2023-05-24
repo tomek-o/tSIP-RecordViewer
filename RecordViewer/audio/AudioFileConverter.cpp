@@ -95,7 +95,7 @@ AudioFileConverter::~AudioFileConverter(void)
 }
 
 
-int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum AudioFileChannel channel)
+int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum AudioFileChannel channel, bool &stopRequest)
 {
 	file->SeekToPcmPosition(0);
 
@@ -177,10 +177,11 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 	uint64_t left = file->GetTotalPcmSamples();
 	unsigned int totalInputSamplesCount = 0;
 	
-	while (left > 0)
+	while (left > 0 && !stopRequest)
 	{
-		int16_t inputBuf[2048];
-		int16_t outputBuf[8192];
+		enum { BASE_COUNT = 4096 };
+		int16_t inputBuf[BASE_COUNT];
+		int16_t outputBuf[BASE_COUNT*4];
 
 		unsigned int count = ARRAY_SIZE(inputBuf);
 		status = file->GetSamples(inputBuf, &count);
@@ -188,6 +189,10 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 		{
 			LOG(PROMPT"Error reading samples from source");
 			break;
+		}
+		else
+		{
+			//LOG(PROMPT"Got %u samples from source, %u left", count, static_cast<unsigned int>(left));
 		}
 
 		totalInputSamplesCount += count;

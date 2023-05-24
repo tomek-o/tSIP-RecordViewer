@@ -117,3 +117,9 @@ void __fastcall TfrmMain::actShowLogExecute(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TfrmMain::miStopTranscribingClick(TObject *Sender)
+{
+	frmRecordings->StopTranscribing();	
+}
+//---------------------------------------------------------------------------
+

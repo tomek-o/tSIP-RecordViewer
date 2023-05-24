@@ -12,16 +12,18 @@ class AudioFileTranscriber
 {
 private:
 	bool terminated;
-	HANDLE hProcess;
+	HANDLE &hProcess;
 public:
-	AudioFileTranscriber(void):
+	AudioFileTranscriber(HANDLE &hProcess):
 		terminated(false),
-		hProcess(NULL)
+		hProcess(hProcess)
 	{
+		hProcess = NULL;
 	}
 
 	~AudioFileTranscriber(void)
 	{
+		hProcess = NULL;
 	}
 
 	/** \brief Convert mono file or one of the stereo file channels to new mono L16, 16ksps wave file

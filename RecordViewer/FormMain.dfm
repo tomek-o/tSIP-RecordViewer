@@ -2,7 +2,7 @@ object frmMain: TfrmMain
   Left = 0
   Top = 0
   Caption = 'Record Viewer'
-  ClientHeight = 233
+  ClientHeight = 252
   ClientWidth = 402
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -21,10 +21,11 @@ object frmMain: TfrmMain
   TextHeight = 13
   object StatusBar: TStatusBar
     Left = 0
-    Top = 214
+    Top = 233
     Width = 402
     Height = 19
     Panels = <>
+    ExplicitTop = 214
   end
   object MainMenu: TMainMenu
     Left = 8
@@ -45,6 +46,13 @@ object frmMain: TfrmMain
       Caption = 'Configuration'
       object miCommonSettings: TMenuItem
         Action = actShowSettings
+      end
+    end
+    object miTools: TMenuItem
+      Caption = 'Tools'
+      object miStopTranscribing: TMenuItem
+        Caption = 'Stop transcribing'
+        OnClick = miStopTranscribingClick
       end
     end
     object miHelp: TMenuItem

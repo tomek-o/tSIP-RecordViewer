@@ -24,6 +24,8 @@ int Execute(AnsiString cmd, HANDLE &hProcess)
 	si.dwFlags = STARTF_USESHOWWINDOW;
 	si.wShowWindow = SW_HIDE;
 
+	hProcess = NULL;
+
 	// Start the child process.
 	if( !CreateProcess( NULL, // No module name (use command line)
 		cmd.c_str(), // Command line
@@ -40,6 +42,8 @@ int Execute(AnsiString cmd, HANDLE &hProcess)
 		LOG( "CreateProcess failed (%d)", GetLastError() );
 		return -1;
 	}
+
+    hProcess = pi.hProcess;
 
 	// Wait until child process exits.
 	WaitForSingleObject( pi.hProcess, INFINITE );

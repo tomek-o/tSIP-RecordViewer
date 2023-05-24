@@ -95,6 +95,7 @@ private:	// User declarations
 
 public:		// User declarations
 	__fastcall TfrmRecordings(TComponent* Owner);
+	void StopTranscribing(void);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmRecordings *frmRecordings;
