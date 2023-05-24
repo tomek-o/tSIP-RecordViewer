@@ -15,6 +15,8 @@ object frmRecordings: TfrmRecordings
   OldCreateOrder = False
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object pnlBottom: TPanel

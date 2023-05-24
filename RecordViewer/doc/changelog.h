@@ -46,6 +46,5 @@ TODO:
 	- test space in whisper directories (model file, source file)
 	- allow to stop transcription process
 	- use something more sensible instead of TerminateProcess?
-	- option to repeat transcription for selected file(s)
 	- optimize for large number of recordings
 */

@@ -24,6 +24,7 @@ struct S_RECORD
 		dir(DIR_UNKNOWN),
 		size(0)
 	{}
+	bool hasTranscription(void) const;
 };
 
 #endif

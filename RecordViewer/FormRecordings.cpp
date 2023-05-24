@@ -7,7 +7,6 @@
 #include "Contacts.h"
 #include "Settings.h"
 #include "AudioFileTranscription.h"
-#include "AudioTranscriptionFileName.h"
 #include "FormTranscription.h"
 #include "common/BtnController.h"
 #include "common/TimeCounter.h"
@@ -631,7 +630,17 @@ void __fastcall TfrmRecordings::miTranscribeFileClick(TObject *Sender)
 
 	if (lvRecords->Selected)
 	{
-		AnsiString filename = records_filtered[lvRecords->Selected->Index].asFilename;
+		const S_RECORD &record = records_filtered[lvRecords->Selected->Index];
+		if (record.hasTranscription())
+		{
+			if (MessageBox(this->Handle, "Transcription of this file already exist.\nAre you sure you want to run it again?",
+				this->Caption.c_str(), MB_YESNO | MB_DEFBUTTON2 | MB_ICONEXCLAMATION) != IDYES)
+			{
+            	return;
+			}
+		}
+
+		AnsiString filename = record.asFilename;
 
 		AnsiString relPath;
 
@@ -680,11 +689,7 @@ void __fastcall TfrmRecordings::popupRecordsPopup(TObject *Sender)
 	if (lvRecords->Selected)
 	{
 		const S_RECORD &record = records_filtered[lvRecords->Selected->Index];
-		AnsiString audioFileName = record.asFilename;
-		AnsiString fileMono = GetTranscriptionFileName(audioFileName, AUDIO_CHANNEL_MONO);
-		AnsiString fileL = GetTranscriptionFileName(audioFileName, AUDIO_CHANNEL_L);
-		AnsiString fileR = GetTranscriptionFileName(audioFileName, AUDIO_CHANNEL_R);
-		if (FileExists(fileMono) || (FileExists(fileL) && FileExists(fileR)))
+		if (record.hasTranscription())
 			miShowFileTranscription->Enabled = true;
 	}
 }
