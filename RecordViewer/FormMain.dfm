@@ -2,7 +2,7 @@ object frmMain: TfrmMain
   Left = 0
   Top = 0
   Caption = 'Record Viewer'
-  ClientHeight = 252
+  ClientHeight = 271
   ClientWidth = 402
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -21,11 +21,11 @@ object frmMain: TfrmMain
   TextHeight = 13
   object StatusBar: TStatusBar
     Left = 0
-    Top = 233
+    Top = 252
     Width = 402
     Height = 19
     Panels = <>
-    ExplicitTop = 214
+    ExplicitTop = 233
   end
   object MainMenu: TMainMenu
     Left = 8
@@ -50,6 +50,10 @@ object frmMain: TfrmMain
     end
     object miTools: TMenuItem
       Caption = 'Tools'
+      object miGenerateMissingTranscriptionsForFilteredFiles: TMenuItem
+        Caption = 'Generate missing transcriptions for filtered files'
+        OnClick = miGenerateMissingTranscriptionsForFilteredFilesClick
+      end
       object miStopTranscribing: TMenuItem
         Caption = 'Stop transcribing'
         OnClick = miStopTranscribingClick

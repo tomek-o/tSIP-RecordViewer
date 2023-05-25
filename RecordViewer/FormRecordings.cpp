@@ -621,7 +621,7 @@ void __fastcall TfrmRecordings::FormCloseQuery(TObject *Sender, bool &CanClose)
 
 void __fastcall TfrmRecordings::miTranscribeFileClick(TObject *Sender)
 {
-	if (transcription.IsRunning())
+	if (transcription.IsRunning() || listTranscriptionProcess.active)
 	{
 		MessageBox(this->Handle, "Another transcription is already running",
 			this->Caption.c_str(), MB_ICONINFORMATION);
@@ -639,33 +639,63 @@ void __fastcall TfrmRecordings::miTranscribeFileClick(TObject *Sender)
             	return;
 			}
 		}
-
-		AnsiString filename = record.asFilename;
-
-		AnsiString relPath;
-
-		AnsiString whisperExe = appSettings.Transcription.whisperExe;
-		relPath = ExtractFileDir(Application->ExeName) + "\\" + whisperExe;
-		if (FileExists(relPath))
-			whisperExe = relPath;
-
-		AnsiString model = appSettings.Transcription.model;
-		relPath = ExtractFileDir(Application->ExeName) + "\\" + model;
-		if (FileExists(relPath))
-			model = relPath;
-
-		transcription.Transcribe(filename, whisperExe, model,
-			appSettings.Transcription.language, appSettings.Transcription.threadCount);
+		TranscribeRecord(record);
 	}
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfrmRecordings::tmrShowTransciptionTimer(TObject *Sender)
+void TfrmRecordings::TranscribeRecord(const S_RECORD &record)
+{
+	AnsiString filename = record.asFilename;
+
+	AnsiString relPath;
+
+	AnsiString whisperExe = appSettings.Transcription.whisperExe;
+	relPath = ExtractFileDir(Application->ExeName) + "\\" + whisperExe;
+	if (FileExists(relPath))
+		whisperExe = relPath;
+
+	AnsiString model = appSettings.Transcription.model;
+	relPath = ExtractFileDir(Application->ExeName) + "\\" + model;
+	if (FileExists(relPath))
+		model = relPath;
+
+	transcription.Transcribe(filename, whisperExe, model,
+		appSettings.Transcription.language, appSettings.Transcription.threadCount);
+}
+
+
+void __fastcall TfrmRecordings::tmrTransciptionTimer(TObject *Sender)
 {
 	AnsiString text;
 	if (transcription.IsRunning())
 	{
 		text.sprintf("Transcribing %s...", ExtractFileName(transcription.GetFileName()).c_str());
+	}
+	else
+	{
+		ListTranscriptionProcess &ltr = listTranscriptionProcess;
+		if (ltr.active)
+		{
+			// checking few files for missing transcription at one timer call
+			for (int i=0; i<5; i++)
+			{
+				if (ltr.listPosition >= ltr.records.size())
+				{
+					ltr.active = false;
+					break;
+				}
+				else
+				{
+					S_RECORD &record = ltr.records[ltr.listPosition++];
+					if (record.hasTranscription() == false)
+					{
+						TranscribeRecord(record);
+						break;
+					}
+				}
+			}
+		}
 	}
 	lblTranscriptionState->Caption = text;
 }
@@ -695,8 +725,23 @@ void __fastcall TfrmRecordings::popupRecordsPopup(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void TfrmRecordings::GenerateMissingTranscriptionsForFilteredFiles(void)
+{
+	if (listTranscriptionProcess.active || transcription.IsRunning())
+	{
+		MessageBox(this->Handle, "Another transcription is already running.\nStop it first if you want to start new transcription process.",
+			this->Caption.c_str(), MB_ICONINFORMATION);
+		return;
+	}
+	ListTranscriptionProcess &ltr = listTranscriptionProcess;
+	ltr.records = records_filtered;
+	ltr.listPosition = 0;
+	ltr.active = true;
+}
+
 void TfrmRecordings::StopTranscribing(void)
 {
+    listTranscriptionProcess.active = false;
 	transcription.Stop();
 }
 

@@ -37,6 +37,7 @@ __published:	// IDE-managed Components
 	TMenuItem *Exit1;
 	TMenuItem *miTools;
 	TMenuItem *miStopTranscribing;
+	TMenuItem *miGenerateMissingTranscriptionsForFilteredFiles;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
 	void __fastcall actShowAboutExecute(TObject *Sender);
@@ -45,6 +46,8 @@ __published:	// IDE-managed Components
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall actShowLogExecute(TObject *Sender);
 	void __fastcall miStopTranscribingClick(TObject *Sender);
+	void __fastcall miGenerateMissingTranscriptionsForFilteredFilesClick(
+          TObject *Sender);
 private:	// User declarations
 
 public:		// User declarations

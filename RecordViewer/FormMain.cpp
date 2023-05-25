@@ -125,3 +125,10 @@ void __fastcall TfrmMain::miStopTranscribingClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TfrmMain::miGenerateMissingTranscriptionsForFilteredFilesClick(
+      TObject *Sender)
+{
+	frmRecordings->GenerateMissingTranscriptionsForFilteredFiles();	
+}
+//---------------------------------------------------------------------------
+

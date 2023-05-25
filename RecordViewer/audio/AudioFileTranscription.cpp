@@ -140,6 +140,8 @@ int AudioFileTranscription::Transcribe(AnsiString fileName, AnsiString whisperEx
 
 	stopRequest = false;
 
+	LOG("Transcribing %s", ExtractFileName(fileName).c_str());
+
 	this->fileName = fileName;
 	this->whisperExe = whisperExe;
 	this->model = model;

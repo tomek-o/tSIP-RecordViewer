@@ -46,7 +46,7 @@ __published:	// IDE-managed Components
 	TButton *btnPause;
 	TMenuItem *miOpenFileInDefaultPlayer;
 	TMenuItem *miTranscribeFile;
-	TTimer *tmrShowTransciption;
+	TTimer *tmrTransciption;
 	TLabel *lblTranscriptionState;
 	TMenuItem *miShowFileTranscription;
 	void __fastcall miPopupRecordsCopyClick(TObject *Sender);
@@ -70,7 +70,7 @@ __published:	// IDE-managed Components
 	void __fastcall miOpenFileInDefaultPlayerClick(TObject *Sender);
 	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
 	void __fastcall miTranscribeFileClick(TObject *Sender);
-	void __fastcall tmrShowTransciptionTimer(TObject *Sender);
+	void __fastcall tmrTransciptionTimer(TObject *Sender);
 	void __fastcall miShowFileTranscriptionClick(TObject *Sender);
 	void __fastcall popupRecordsPopup(TObject *Sender);
 private:	// User declarations
@@ -93,8 +93,21 @@ private:	// User declarations
 	void Play(void);
 	void StopPlaySelected(void);
 
+	void TranscribeRecord(const S_RECORD &record);
+
+	struct ListTranscriptionProcess {
+		bool active;
+		unsigned int listPosition;
+		std::vector<S_RECORD> records;
+		ListTranscriptionProcess(void):
+			active(false),
+			listPosition(0)
+		{}
+	} listTranscriptionProcess;
+
 public:		// User declarations
 	__fastcall TfrmRecordings(TComponent* Owner);
+	void GenerateMissingTranscriptionsForFilteredFiles(void);
 	void StopTranscribing(void);
 };
 //---------------------------------------------------------------------------
