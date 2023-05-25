@@ -42,6 +42,13 @@ int CreateTranscription(AudioFile *file, AnsiString fileName, AudioFileChannel c
 		{
 			AnsiString src = whisperSourceFileName + ".json";
 			AnsiString dest = GetTranscriptionFileName(fileName, channel);
+			if (FileExists(dest))
+			{
+				if (DeleteFile(dest) == false)
+				{
+                	LOG("Failed to delete existing file (%s) before moving new one", ExtractFileName(dest).c_str());
+				}
+			}
 			if (MoveFile(src.c_str(), dest.c_str()))
 			{
 
@@ -66,6 +73,13 @@ int CreateTranscriptionWithoutConversion(AudioFile *file, AnsiString fileName,
 	{
 		AnsiString src = fileName + ".json";
 		AnsiString dest = GetTranscriptionFileName(fileName, AUDIO_CHANNEL_MONO);
+		if (FileExists(dest))
+		{
+			if (DeleteFile(dest) == false)
+			{
+				LOG("Failed to delete existing file (%s) before moving new one", ExtractFileName(dest).c_str());
+			}
+		}
 		if (MoveFile(src.c_str(), dest.c_str()))
 		{
 
