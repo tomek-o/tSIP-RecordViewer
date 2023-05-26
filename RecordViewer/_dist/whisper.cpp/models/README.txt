@@ -1,0 +1,1 @@
+Copy model files (e.g. ggml-base.en.bin) here.
