@@ -25,7 +25,6 @@ object frmMain: TfrmMain
     Width = 402
     Height = 19
     Panels = <>
-    ExplicitTop = 233
   end
   object MainMenu: TMainMenu
     Left = 8

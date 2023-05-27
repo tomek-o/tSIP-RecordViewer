@@ -4,8 +4,8 @@ object frmSettings: TfrmSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Settings'
-  ClientHeight = 286
-  ClientWidth = 459
+  ClientHeight = 291
+  ClientWidth = 532
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,17 +19,19 @@ object frmSettings: TfrmSettings
   TextHeight = 13
   object pnlBottom: TPanel
     Left = 0
-    Top = 249
-    Width = 459
+    Top = 254
+    Width = 532
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 249
+    ExplicitWidth = 459
     DesignSize = (
-      459
+      532
       37)
     object btnCancel: TButton
-      Left = 375
+      Left = 448
       Top = 6
       Width = 75
       Height = 25
@@ -37,9 +39,10 @@ object frmSettings: TfrmSettings
       Caption = 'Cancel'
       TabOrder = 1
       OnClick = btnCancelClick
+      ExplicitLeft = 375
     end
     object btnApply: TButton
-      Left = 294
+      Left = 367
       Top = 6
       Width = 75
       Height = 25
@@ -47,16 +50,19 @@ object frmSettings: TfrmSettings
       Caption = 'Apply'
       TabOrder = 0
       OnClick = btnApplyClick
+      ExplicitLeft = 294
     end
   end
   object pcGeneral: TPageControl
     Left = 0
     Top = 0
-    Width = 459
-    Height = 249
+    Width = 532
+    Height = 254
     ActivePage = tsWhisperCpp
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 459
+    ExplicitHeight = 249
     object tsGeneral: TTabSheet
       Caption = 'General'
       object chbAlwaysOnTop: TCheckBox
@@ -100,6 +106,8 @@ object frmSettings: TfrmSettings
     object tsWhisperCpp: TTabSheet
       Caption = 'S2T: whisper.cpp'
       ImageIndex = 3
+      ExplicitWidth = 451
+      ExplicitHeight = 221
       object lblWhisperExe: TLabel
         Left = 3
         Top = 6
@@ -138,12 +146,12 @@ object frmSettings: TfrmSettings
       object edWhisperExe: TEdit
         Left = 178
         Top = 3
-        Width = 239
+        Width = 310
         Height = 21
         TabOrder = 0
       end
       object btnSelectWhisperExe: TButton
-        Left = 418
+        Left = 494
         Top = 3
         Width = 25
         Height = 21
@@ -154,12 +162,12 @@ object frmSettings: TfrmSettings
       object edWhisperModel: TEdit
         Left = 178
         Top = 27
-        Width = 239
+        Width = 310
         Height = 21
         TabOrder = 2
       end
       object btnSelectWhisperModel: TButton
-        Left = 418
+        Left = 494
         Top = 27
         Width = 25
         Height = 21

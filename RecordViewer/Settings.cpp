@@ -19,27 +19,27 @@ inline void strncpyz(char* dst, const char* src, int dstsize) {
 	dst[dstsize-1] = '\0';
 }
 
-void Settings::SetDefault(void)
+const char* Settings::Recordings::getTranscriptionFilterName(enum Settings::Recordings::TranscriptionFilter type)
 {
-	frmMain.iWidth = 600;
-	frmMain.iHeight = 500;
-	frmMain.iPosX = 30;
-	frmMain.iPosY = 30;
-	frmMain.bWindowMaximized = false;
-	frmMain.bAlwaysOnTop = false;
-
-	Logging.bLogToFile = false;
-	Logging.bFlush = false;
-	Logging.iMaxFileSize = Settings::_Logging::DEF_MAX_FILE_SIZE;
-	Logging.iMaxUiLogLines = 5000;
+	switch (type)
+	{
+	case TR_FILTER_WITHOUT:
+		return "without transcription text";
+	case TR_FILTER_ALL:
+		return "with all transcribed text";
+	case TR_FILTER_LOCAL:
+		return "with local text";
+	case TR_FILTER_2ND_PARTY:
+		return "with 2nd party text";
+	default:
+		return "???";
+	}
 }
 
 int Settings::Read(AnsiString asFileName)
 {
 	Json::Value root;   // will contains the root value after parsing.
 	Json::Reader reader;
-
-    SetDefault();
 
 	try
 	{
@@ -61,56 +61,72 @@ int Settings::Read(AnsiString asFileName)
 	/** \todo Ugly fixed taskbar margin */
 	int maxY = GetSystemMetrics(SM_CYSCREEN) - 32;
 
-	const Json::Value &frmMainJson = root["frmMain"];
-	frmMain.iWidth = frmMainJson.get("AppWidth", 350).asInt();
-	frmMain.iHeight = frmMainJson.get("AppHeight", 300).asInt();
-	if (frmMain.iWidth < 250 || frmMain.iWidth > maxX + 20)
 	{
-		frmMain.iWidth = 250;
-	}
-	if (frmMain.iHeight < 200 || frmMain.iHeight > maxY + 20)
-	{
-		frmMain.iHeight = 200;
-	}
-	frmMain.iPosX = frmMainJson.get("AppPositionX", 30).asInt();
-	frmMain.iPosY = frmMainJson.get("AppPositionY", 30).asInt();
-	if (frmMain.iPosX < 0)
-		frmMain.iPosX = 0;
-	if (frmMain.iPosY < 0)
-		frmMain.iPosY = 0;
-	if (frmMain.iPosX + frmMain.iWidth > maxX)
-		frmMain.iPosX = maxX - frmMain.iWidth;
-	if (frmMain.iPosY + frmMain.iHeight > maxY)
-		frmMain.iPosY = maxY - frmMain.iHeight;
-	frmMain.bWindowMaximized = frmMainJson.get("Maximized", false).asBool();
-	frmMain.bAlwaysOnTop = frmMainJson.get("AlwaysOnTop", false).asBool();
-
-	const Json::Value &LoggingJson = root["Logging"];
-	Logging.bLogToFile = LoggingJson.get("LogToFile", false).asBool();
-	Logging.bFlush = LoggingJson.get("Flush", Logging.bFlush).asBool();
-	Logging.iMaxFileSize = LoggingJson.get("MaxFileSize", Logging.iMaxFileSize).asInt();
-	if (Logging.iMaxFileSize < Settings::_Logging::MIN_MAX_FILE_SIZE || Logging.iMaxFileSize > Settings::_Logging::MIN_MAX_FILE_SIZE)
-	{
-		Logging.iMaxFileSize = Settings::_Logging::DEF_MAX_FILE_SIZE;
-	}
-	Logging.iMaxUiLogLines = LoggingJson.get("MaxUiLogLines", 5000).asInt();
-
-	{
-		const Json::Value &jv = root["Contacts"];
-		jv.getAString("FileName", Contacts.fileName);
+		const Json::Value &frmMainJson = root["frmMain"];
+		frmMainJson.getInt("width", frmMain.width);
+		frmMainJson.getInt("height", frmMain.height);
+		if (frmMain.width < 250 || frmMain.width > maxX + 20)
+		{
+			frmMain.width = 400;
+		}
+		if (frmMain.height < 200 || frmMain.height > maxY + 20)
+		{
+			frmMain.height = 300;
+		}
+		frmMainJson.getInt("positionX", frmMain.posX);
+		frmMainJson.getInt("positionY", frmMain.posY);
+		if (frmMain.posX < 0)
+			frmMain.posX = 0;
+		if (frmMain.posY < 0)
+			frmMain.posY = 0;
+		if (frmMain.posX + frmMain.width > maxX)
+			frmMain.posX = maxX - frmMain.width;
+		if (frmMain.posY + frmMain.height > maxY)
+			frmMain.posY = maxY - frmMain.height;
+		frmMainJson.getBool("maximized", frmMain.windowMaximized);
+		frmMainJson.getBool("alwaysOnTop", frmMain.alwaysOnTop);
 	}
 
 	{
-		const Json::Value &jv = root["Audio"];
-		jv.getAString("OutputDevice", Audio.outputDevice);
+		const Json::Value &jv = root["logging"];
+		jv.getBool("logToFile", logging.logToFile);
+		jv.getBool("flush", logging.flush);
+		jv.getInt("maxFileSize", logging.maxFileSize);
+		if (logging.maxFileSize < Settings::Logging::MIN_MAX_FILE_SIZE || logging.maxFileSize > Settings::Logging::MAX_MAX_FILE_SIZE)
+		{
+			logging.maxFileSize = Settings::Logging::DEF_MAX_FILE_SIZE;
+		}
+		jv.getUInt("maxUiLogLines", logging.maxUiLogLines);
 	}
 
 	{
-		const Json::Value &jv = root["Transcription"];
-		jv.getAString("WhisperExe", Transcription.whisperExe);
-		jv.getAString("Model", Transcription.model);
-		jv.getAString("Language", Transcription.language);
-		jv.getUInt("ThreadCount", Transcription.threadCount);
+		const Json::Value &jv = root["contacts"];
+		jv.getAString("fileName", contacts.fileName);
+	}
+
+	{
+		const Json::Value &jv = root["audio"];
+		jv.getAString("outputDevice", audio.outputDevice);
+	}
+
+	{
+		const Json::Value &jv = root["transcription"];
+		jv.getAString("whisperExe", transcription.whisperExe);
+		jv.getAString("model", transcription.model);
+		jv.getAString("language", transcription.language);
+		jv.getUInt("threadCount", transcription.threadCount);
+	}
+
+	{
+		const Json::Value &jv = root["recordings"];
+		{
+			int tmp = recordings.transcriptionFilter;
+			jv.getInt("transcriptionFilter", tmp);
+			if (tmp >= 0 && tmp < Recordings::TR_FILTER__LIMITER)
+			{
+				recordings.transcriptionFilter = static_cast<Recordings::TranscriptionFilter>(tmp);
+			}
+		}
 	}
 
 	return 0;
@@ -121,34 +137,47 @@ int Settings::Write(AnsiString asFileName)
 	Json::Value root;
 	Json::StyledWriter writer;
 
-	root["frmMain"]["AppWidth"] = frmMain.iWidth;
-	root["frmMain"]["AppHeight"] = frmMain.iHeight;
-	root["frmMain"]["AppPositionX"] = frmMain.iPosX;
-	root["frmMain"]["AppPositionY"] = frmMain.iPosY;
-	root["frmMain"]["Maximized"] = frmMain.bWindowMaximized;
-	root["frmMain"]["AlwaysOnTop"] = frmMain.bAlwaysOnTop;
-
-	root["Logging"]["LogToFile"] = Logging.bLogToFile;
-	root["Logging"]["Flush"] = Logging.bFlush;
-	root["Logging"]["MaxFileSize"] = Logging.iMaxFileSize;
-	root["Logging"]["MaxUiLogLines"] = Logging.iMaxUiLogLines;
-
 	{
-		Json::Value &jv = root["Contacts"];
-		jv["FileName"] = Contacts.fileName;
+		Json::Value &jv = root["frmMain"];
+		jv["width"] = frmMain.width;
+		jv["height"] = frmMain.height;
+		jv["positionX"] = frmMain.posX;
+		jv["positionY"] = frmMain.posY;
+		jv["maximized"] = frmMain.windowMaximized;
+		jv["alwaysOnTop"] = frmMain.alwaysOnTop;
 	}
 
 	{
-		Json::Value &jv = root["Audio"];
-		jv["OutputDevice"] = Audio.outputDevice;
+		Json::Value &jv = root["logging"];
+		jv["logToFile"] = logging.logToFile;
+		jv["flush"] = logging.flush;
+		jv["maxFileSize"] = logging.maxFileSize;
+		jv["maxUiLogLines"] = logging.maxUiLogLines;
 	}
 
 	{
-		Json::Value &jv = root["Transcription"];
-		jv["WhisperExe"] = Transcription.whisperExe;
-		jv["Model"] = Transcription.model;
-		jv["Language"] = Transcription.language;
-		jv["ThreadCount"] = Transcription.threadCount;
+		Json::Value &jv = root["contacts"];
+		jv["fileName"] = contacts.fileName;
+	}
+
+	{
+		Json::Value &jv = root["audio"];
+		jv["outputDevice"] = audio.outputDevice;
+	}
+
+	{
+		Json::Value &jv = root["transcription"];
+		jv["whisperExe"] = transcription.whisperExe;
+		jv["model"] = transcription.model;
+		jv["language"] = transcription.language;
+		jv["threadCount"] = transcription.threadCount;
+	}
+
+	{
+		Json::Value &jv = root["recordings"];
+		{
+			jv["transcriptionFilter"] = recordings.transcriptionFilter;
+		}
 	}
 
 	std::string outputConfig = writer.write( root );

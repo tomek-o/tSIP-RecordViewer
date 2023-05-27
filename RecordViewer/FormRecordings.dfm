@@ -15,6 +15,8 @@ object frmRecordings: TfrmRecordings
   OldCreateOrder = False
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object pnlBottom: TPanel
@@ -26,14 +28,14 @@ object frmRecordings: TfrmRecordings
     BevelOuter = bvNone
     TabOrder = 0
     object lblItems: TLabel
-      Left = 138
+      Left = 282
       Top = 44
       Width = 31
       Height = 13
       Caption = 'Items:'
     end
     object lblItemsCount: TLabel
-      Left = 186
+      Left = 330
       Top = 44
       Width = 6
       Height = 13
@@ -47,14 +49,14 @@ object frmRecordings: TfrmRecordings
       Caption = 'Filter'
     end
     object lblItemsSize: TLabel
-      Left = 241
+      Left = 385
       Top = 44
       Width = 23
       Height = 13
       Caption = '0 MB'
     end
     object lblTranscriptionState: TLabel
-      Left = 116
+      Left = 118
       Top = 13
       Width = 98
       Height = 13
@@ -151,6 +153,16 @@ object frmRecordings: TfrmRecordings
       Caption = 'Refresh list'
       TabOrder = 2
       OnClick = btnRefreshRecordListClick
+    end
+    object cbTranscriptionFilter: TComboBox
+      Left = 120
+      Top = 41
+      Width = 145
+      Height = 21
+      Style = csDropDownList
+      ItemHeight = 0
+      TabOrder = 3
+      OnChange = cbTranscriptionFilterChange
     end
   end
   object lvRecords: TListView

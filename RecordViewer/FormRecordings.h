@@ -49,6 +49,7 @@ __published:	// IDE-managed Components
 	TTimer *tmrTransciption;
 	TLabel *lblTranscriptionState;
 	TMenuItem *miShowFileTranscription;
+	TComboBox *cbTranscriptionFilter;
 	void __fastcall miPopupRecordsCopyClick(TObject *Sender);
 	void __fastcall lvRecordsData(TObject *Sender, TListItem *Item);
 	void __fastcall lvRecordsColumnClick(TObject *Sender, TListColumn *Column);
@@ -73,6 +74,7 @@ __published:	// IDE-managed Components
 	void __fastcall tmrTransciptionTimer(TObject *Sender);
 	void __fastcall miShowFileTranscriptionClick(TObject *Sender);
 	void __fastcall popupRecordsPopup(TObject *Sender);
+	void __fastcall cbTranscriptionFilterChange(TObject *Sender);
 private:	// User declarations
 	void __fastcall TrackBarMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
 	void __fastcall TrackBarMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
@@ -80,7 +82,7 @@ private:	// User declarations
     AudioFilePlayer player;
 
 	std::vector<S_RECORD> records;
-	std::vector<S_RECORD> records_filtered;
+	std::vector<unsigned int> recordsFilteredIds;
 	void Filter(void);
 	struct Sorting {
 		int column;
@@ -98,7 +100,7 @@ private:	// User declarations
 	struct ListTranscriptionProcess {
 		bool active;
 		unsigned int listPosition;
-		std::vector<S_RECORD> records;
+		std::vector<unsigned int> recordIds;
 		ListTranscriptionProcess(void):
 			active(false),
 			listPosition(0)

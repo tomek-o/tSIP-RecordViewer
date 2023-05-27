@@ -36,8 +36,6 @@ object frmTranscription: TfrmTranscription
     ScrollBars = ssVertical
     TabOrder = 0
     WantTabs = True
-    ExplicitWidth = 444
-    ExplicitHeight = 218
   end
   object pnlTop: TPanel
     Left = 0

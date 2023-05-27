@@ -4,11 +4,11 @@
 #define RecordH
 //---------------------------------------------------------------------------
 
+#include "Transcription.h"
 #include <System.hpp>
 
 struct S_RECORD
 {
-	int id;		///< important for records_filtered only; mapping records_filtered to records
 	AnsiString asFilename;
 	enum DIR {
 		DIR_UNKNOWN = 0,
@@ -19,12 +19,40 @@ struct S_RECORD
 	AnsiString asNumber;
 	AnsiString asDescription;
 	int size;
+	TranscriptionData tdataLMono;	// transcription for mono file or left channel of stereo file
+	AnsiString fullTranscriptionTextLMono;
+	TranscriptionData tdataR;		// transcription for right channel of stereo file
+	AnsiString fullTranscriptionTextR;
+	bool hasMonoTranscription;
+	bool hasStereoTranscription;
+
 	S_RECORD(void):
-		id(-1),
 		dir(DIR_UNKNOWN),
-		size(0)
+		size(0),
+		hasMonoTranscription(false),
+		hasStereoTranscription(false)
 	{}
-	bool hasTranscription(void) const;
+
+	bool hasTranscription(void) const
+	{
+    	return hasMonoTranscription || hasStereoTranscription;
+	}
+
+	int loadTranscription(void);
+
+	const TranscriptionData& getTranscriptionMono(void) const
+	{
+		return tdataLMono;
+	}
+
+	const TranscriptionData& getTranscriptionL(void) const
+	{
+		return tdataLMono;
+	}
+	const TranscriptionData& getTranscriptionR(void) const
+	{
+		return tdataR;
+	}
 };
 
 #endif

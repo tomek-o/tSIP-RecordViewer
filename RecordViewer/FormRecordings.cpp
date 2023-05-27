@@ -58,13 +58,21 @@ __fastcall TfrmRecordings::TfrmRecordings(TComponent* Owner)
 	btnPause->Enabled = false;
 
 	lblTranscriptionState->Caption = "";
+
+	cbTranscriptionFilter->Clear();
+	for (int i=0; i<Settings::Recordings::TR_FILTER__LIMITER; i++)
+	{
+		cbTranscriptionFilter->Items->Add(Settings::Recordings::getTranscriptionFilterName(static_cast<Settings::Recordings::TranscriptionFilter>(i)));
+	}
+	if (appSettings.recordings.transcriptionFilter >= 0 && appSettings.recordings.transcriptionFilter < cbTranscriptionFilter->Items->Count)
+		cbTranscriptionFilter->ItemIndex = appSettings.recordings.transcriptionFilter;
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmRecordings::lvRecordsData(TObject *Sender, TListItem *Item)
 {
 	int id = Item->Index;
-	S_RECORD &record = records_filtered[id];
+	S_RECORD &record = records[recordsFilteredIds[id]];
 	if (record.dir == S_RECORD::DIR_IN)
 		Item->ImageIndex = 0;
 	else if (record.dir == S_RECORD::DIR_OUT)
@@ -82,20 +90,23 @@ void __fastcall TfrmRecordings::lvRecordsData(TObject *Sender, TListItem *Item)
 
 void TfrmRecordings::Filter(void)
 {
-	for (unsigned int i=0; i<records.size(); i++)
-	{
-        records[i].id = i;
-    }
 	if (edFilter->Text == "")
 	{
-    	records_filtered = records;
+		recordsFilteredIds.resize(records.size());
+		for (unsigned int i=0; i<records.size(); i++)
+		{
+			recordsFilteredIds[i] = i;
+		}
 	}
 	else
 	{
-		records_filtered.clear();
-		records_filtered.reserve(records.size());
+		recordsFilteredIds.clear();
+		recordsFilteredIds.reserve(records.size());
 
 		AnsiString asFilter = edFilter->Text;
+		AnsiString asFilterLowerCase = asFilter.LowerCase();
+		AnsiString asFilterUpperCase = asFilter.UpperCase();
+		
 		for (unsigned int i=0; i<records.size(); i++)
 		{
 			S_RECORD &record = records[i];
@@ -108,24 +119,44 @@ void TfrmRecordings::Filter(void)
 			{
 				match = true;
 			}
-			else if (UpperCase(record.asDescription).Pos(UpperCase(asFilter)))
+			else if (UpperCase(record.asDescription).Pos(asFilterUpperCase))
 			{
 				match = true;
+			}
+			else
+			{
+				if (appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_ALL)
+				{
+					if (record.fullTranscriptionTextLMono.Pos(asFilterLowerCase) ||
+						record.fullTranscriptionTextR.Pos(asFilterLowerCase))
+					{
+						match = true;
+					}
+				}
+				else if (appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_LOCAL)
+				{
+					if (record.fullTranscriptionTextLMono.Pos(asFilterLowerCase))
+					{
+						match = true;
+					}
+				}
+				else if (appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_2ND_PARTY)
+				{
+					if (record.fullTranscriptionTextR.Pos(asFilterLowerCase))
+					{
+						match = true;
+					}
+				}
 			}
 
 			if (match)
 			{
-				records_filtered.push_back(record);
+				recordsFilteredIds.push_back(i);
             }
 		}
 	}
 
-	lvRecords->Items->Count = records_filtered.size();
-
-	if (sorting.column >= 0)
-	{
-		std::stable_sort(records_filtered.begin(), records_filtered.end(), v_compare_records);
-    }
+	lvRecords->Items->Count = recordsFilteredIds.size();
 
 	lvRecords->Invalidate();
 	lvRecords->Height += 1;
@@ -136,8 +167,8 @@ void TfrmRecordings::Filter(void)
 //	lvRecords->Columns->Items[0]->AutoSize = false;
 
 	unsigned long long totalSize = 0;
-	for (unsigned int i=0; i<records_filtered.size(); i++) {
-		totalSize += records_filtered[i].size;
+	for (unsigned int i=0; i<recordsFilteredIds.size(); i++) {
+		totalSize += records[recordsFilteredIds[i]].size;
 	}
 
 	lblItemsCount->Caption = lvRecords->Items->Count;
@@ -175,7 +206,8 @@ void __fastcall TfrmRecordings::miPopupRecordsCopyClick(TObject *Sender)
 	if (!lvRecords->Selected)
 		return;
 	int id = lvRecords->Selected->Index;
-	AnsiString filename = records_filtered[id].asFilename;
+	const S_RECORD &record = records[recordsFilteredIds[id]];
+	AnsiString filename = record.asFilename;
 	Clipboard()->SetTextBuf(filename.c_str());
 }
 //---------------------------------------------------------------------------
@@ -232,6 +264,13 @@ bool __fastcall TfrmRecordings::v_compare_records(const S_RECORD& d1, const S_RE
 void __fastcall TfrmRecordings::lvRecordsColumnClick(TObject *Sender,
       TListColumn *Column)
 {
+	if (listTranscriptionProcess.active || transcription.IsRunning())
+	{
+		MessageBox(this->Handle, "Sorting is blocked while transcription is running.",
+			this->Caption.c_str(), MB_ICONINFORMATION);
+		return;
+	}
+
 	sorting.column = Column->Index;
 	for (int i=0; i<lvRecords->Columns->Count; i++)
 	{
@@ -245,7 +284,8 @@ void __fastcall TfrmRecordings::lvRecordsColumnClick(TObject *Sender,
 		Column->ImageIndex = 0;
 	sorting.forward = (Column->ImageIndex == 0);
 
-	std::stable_sort(records_filtered.begin(), records_filtered.end(), v_compare_records);
+	std::stable_sort(records.begin(), records.end(), v_compare_records);
+	Filter();
 
 	lvRecords->Invalidate();
 }
@@ -418,6 +458,8 @@ void TfrmRecordings::AddDirectory(AnsiString dir)
 				record.asDescription = contact->description;
 			}
 
+            record.loadTranscription();
+
 			records.push_back(record);
 		}
 		hasfiles = FindNextFile(hFind, &file);
@@ -428,6 +470,12 @@ void TfrmRecordings::AddDirectory(AnsiString dir)
 
 void __fastcall TfrmRecordings::btnRefreshRecordListClick(TObject *Sender)
 {
+	if (listTranscriptionProcess.active || transcription.IsRunning())
+	{
+		MessageBox(this->Handle, "Reloading list is blocked while transcription is running.",
+			this->Caption.c_str(), MB_ICONINFORMATION);
+		return;
+	}
 	RefreshList();
 }
 //---------------------------------------------------------------------------
@@ -459,7 +507,8 @@ void __fastcall TfrmRecordings::miCopyNumberClick(TObject *Sender)
 	if (!lvRecords->Selected)
 		return;
 	int id = lvRecords->Selected->Index;
-	AnsiString number = records_filtered[id].asNumber;
+	const S_RECORD &record = records[recordsFilteredIds[id]];
+	AnsiString number = record.asNumber;
 	Clipboard()->SetTextBuf(number.c_str());
 }
 //---------------------------------------------------------------------------
@@ -468,8 +517,10 @@ void TfrmRecordings::Play(void)
 {
 	if (lvRecords->Selected)
 	{
-		AnsiString filename = records_filtered[lvRecords->Selected->Index].asFilename;
-		player.Play(filename, appSettings.Audio.outputDevice);
+		int id = lvRecords->Selected->Index;
+		const S_RECORD &record = records[recordsFilteredIds[id]];
+		AnsiString filename = record.asFilename;
+		player.Play(filename, appSettings.audio.outputDevice);
 		TrackBar->Visible = true;
 		tmrRefreshPlayerPosition->Enabled = true;
 	}
@@ -477,6 +528,13 @@ void TfrmRecordings::Play(void)
 
 void __fastcall TfrmRecordings::miDeleteFilesClick(TObject *Sender)
 {
+	if (listTranscriptionProcess.active || transcription.IsRunning())
+	{
+		MessageBox(this->Handle, "Deleting is blocked while transcription is running.",
+			this->Caption.c_str(), MB_ICONINFORMATION);
+		return;
+	}
+
 	int count = lvRecords->SelCount;
 	AnsiString msg;
 	if (count > 1)
@@ -501,8 +559,8 @@ void __fastcall TfrmRecordings::miDeleteFilesClick(TObject *Sender)
 	{
 		if (lvRecords->Items->Item[i]->Selected)
 		{
-			int id = records_filtered[i].id;
-			DeleteFile(records_filtered[i].asFilename);
+			int id = recordsFilteredIds[i];
+			DeleteFile(records[id].asFilename);
 			idsToErase.insert(id);
 		}
 	}
@@ -518,10 +576,10 @@ void __fastcall TfrmRecordings::FormCreate(TObject *Sender)
 {
 	AnsiString asContactsFile;
 	// try guessing contacts file name (main application may be branded if not present in configuration
-	if (appSettings.Contacts.fileName != "")
+	if (appSettings.contacts.fileName != "")
 	{
 		asContactsFile.sprintf("%s\\%s", ExtractFileDir(Application->ExeName).c_str(),
-			appSettings.Contacts.fileName.c_str());
+			appSettings.contacts.fileName.c_str());
     }
 	else
 	{
@@ -607,7 +665,9 @@ void __fastcall TfrmRecordings::miOpenFileInDefaultPlayerClick(TObject *Sender)
 {
 	if (lvRecords->Selected)
 	{
-		AnsiString filename = records_filtered[lvRecords->Selected->Index].asFilename;
+		int id = lvRecords->Selected->Index;
+		const S_RECORD &record = records[recordsFilteredIds[id]];
+		AnsiString filename = record.asFilename;
 		ShellExecute(NULL, "open", filename.c_str(), NULL, NULL, SW_SHOWNORMAL);
 	}
 }
@@ -630,7 +690,8 @@ void __fastcall TfrmRecordings::miTranscribeFileClick(TObject *Sender)
 
 	if (lvRecords->Selected)
 	{
-		const S_RECORD &record = records_filtered[lvRecords->Selected->Index];
+		int id = lvRecords->Selected->Index;
+		const S_RECORD &record = records[recordsFilteredIds[id]];
 		if (record.hasTranscription())
 		{
 			if (MessageBox(this->Handle, "Transcription of this file already exist.\nAre you sure you want to run it again?",
@@ -650,18 +711,18 @@ void TfrmRecordings::TranscribeRecord(const S_RECORD &record)
 
 	AnsiString relPath;
 
-	AnsiString whisperExe = appSettings.Transcription.whisperExe;
+	AnsiString whisperExe = appSettings.transcription.whisperExe;
 	relPath = ExtractFileDir(Application->ExeName) + "\\" + whisperExe;
 	if (FileExists(relPath))
 		whisperExe = relPath;
 
-	AnsiString model = appSettings.Transcription.model;
+	AnsiString model = appSettings.transcription.model;
 	relPath = ExtractFileDir(Application->ExeName) + "\\" + model;
 	if (FileExists(relPath))
 		model = relPath;
 
 	transcription.Transcribe(filename, whisperExe, model,
-		appSettings.Transcription.language, appSettings.Transcription.threadCount);
+		appSettings.transcription.language, appSettings.transcription.threadCount);
 }
 
 
@@ -680,18 +741,22 @@ void __fastcall TfrmRecordings::tmrTransciptionTimer(TObject *Sender)
 			// checking few files for missing transcription at one timer call
 			for (int i=0; i<5; i++)
 			{
-				if (ltr.listPosition >= ltr.records.size())
+				if (ltr.listPosition >= ltr.recordIds.size())
 				{
 					ltr.active = false;
 					break;
 				}
 				else
 				{
-					S_RECORD &record = ltr.records[ltr.listPosition++];
-					if (record.hasTranscription() == false)
+					unsigned int id = ltr.recordIds[ltr.listPosition++];
+					if (id < records.size())
 					{
-						TranscribeRecord(record);
-						break;
+						S_RECORD &record = records[id];
+						if (record.hasTranscription() == false)
+						{
+							TranscribeRecord(record);
+							break;
+						}
 					}
 				}
 			}
@@ -705,7 +770,8 @@ void __fastcall TfrmRecordings::miShowFileTranscriptionClick(TObject *Sender)
 {
 	if (lvRecords->Selected)
 	{
-		const S_RECORD &record = records_filtered[lvRecords->Selected->Index];
+		int id = lvRecords->Selected->Index;
+		const S_RECORD &record = records[recordsFilteredIds[id]];
 		TfrmTranscription *frm = new TfrmTranscription(NULL, record);
 		frm->Show();
 	}
@@ -718,7 +784,8 @@ void __fastcall TfrmRecordings::popupRecordsPopup(TObject *Sender)
 
 	if (lvRecords->Selected)
 	{
-		const S_RECORD &record = records_filtered[lvRecords->Selected->Index];
+		int id = lvRecords->Selected->Index;
+		const S_RECORD &record = records[recordsFilteredIds[id]];
 		if (record.hasTranscription())
 			miShowFileTranscription->Enabled = true;
 	}
@@ -734,7 +801,7 @@ void TfrmRecordings::GenerateMissingTranscriptionsForFilteredFiles(void)
 		return;
 	}
 	ListTranscriptionProcess &ltr = listTranscriptionProcess;
-	ltr.records = records_filtered;
+	ltr.recordIds = recordsFilteredIds;
 	ltr.listPosition = 0;
 	ltr.active = true;
 }
@@ -744,4 +811,11 @@ void TfrmRecordings::StopTranscribing(void)
     listTranscriptionProcess.active = false;
 	transcription.Stop();
 }
+
+void __fastcall TfrmRecordings::cbTranscriptionFilterChange(TObject *Sender)
+{
+	appSettings.recordings.transcriptionFilter = static_cast<Settings::Recordings::TranscriptionFilter>(cbTranscriptionFilter->ItemIndex);
+	Filter();
+}
+//---------------------------------------------------------------------------
 

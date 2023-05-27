@@ -20,13 +20,13 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 {
     assert(appSettings);
 	tmpSettings = *appSettings;
-	chbAlwaysOnTop->Checked = tmpSettings.frmMain.bAlwaysOnTop;
+	chbAlwaysOnTop->Checked = tmpSettings.frmMain.alwaysOnTop;
 
-	chbLogToFile->Checked = tmpSettings.Logging.bLogToFile;
+	chbLogToFile->Checked = tmpSettings.logging.logToFile;
 	cmbMaxUiLogLines->ItemIndex = -1;
 	for (int i=0; i<cmbMaxUiLogLines->Items->Count; i++)
 	{
-		if ((unsigned int)StrToInt(cmbMaxUiLogLines->Items->Strings[i]) >= tmpSettings.Logging.iMaxUiLogLines)
+		if ((unsigned int)StrToInt(cmbMaxUiLogLines->Items->Strings[i]) >= tmpSettings.logging.maxUiLogLines)
 		{
 			cmbMaxUiLogLines->ItemIndex = i;
 			break;
@@ -37,12 +37,12 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 		cmbMaxUiLogLines->ItemHeight = cmbMaxUiLogLines->Items->Count - 1;
 	}
 
-	edWhisperExe->Text = tmpSettings.Transcription.whisperExe;
-	edWhisperModel->Text = tmpSettings.Transcription.model;
-	edWhisperLanguage->Text = tmpSettings.Transcription.language;
-	if (tmpSettings.Transcription.threadCount > 0 && tmpSettings.Transcription.threadCount < static_cast<unsigned int>(cbWhisperThreadCount->Items->Count))
+	edWhisperExe->Text = tmpSettings.transcription.whisperExe;
+	edWhisperModel->Text = tmpSettings.transcription.model;
+	edWhisperLanguage->Text = tmpSettings.transcription.language;
+	if (tmpSettings.transcription.threadCount > 0 && tmpSettings.transcription.threadCount < static_cast<unsigned int>(cbWhisperThreadCount->Items->Count))
 	{
-		cbWhisperThreadCount->ItemIndex = tmpSettings.Transcription.threadCount - 1;
+		cbWhisperThreadCount->ItemIndex = tmpSettings.transcription.threadCount - 1;
 	}
 	else
 	{
@@ -59,22 +59,22 @@ void __fastcall TfrmSettings::btnCancelClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 {
-	tmpSettings.Logging.bLogToFile = chbLogToFile->Checked;
+	tmpSettings.logging.logToFile = chbLogToFile->Checked;
 
 	if (cbAudioOutput->ItemIndex == 0)
 	{
 		// WAVE mapper / default device
-		tmpSettings.Audio.outputDevice = "";
+		tmpSettings.audio.outputDevice = "";
 	}
 	else if (cbAudioOutput->Tag == 0 || cbAudioOutput->ItemIndex != cbAudioOutput->Items->Count - 1)
 	{
-		tmpSettings.Audio.outputDevice = cbAudioOutput->Text.c_str();
+		tmpSettings.audio.outputDevice = cbAudioOutput->Text.c_str();
 	}
 
-	tmpSettings.Transcription.whisperExe = edWhisperExe->Text;
-	tmpSettings.Transcription.model = edWhisperModel->Text;
-	tmpSettings.Transcription.language = edWhisperLanguage->Text;
-	tmpSettings.Transcription.threadCount = StrToIntDef(cbWhisperThreadCount->Text, tmpSettings.Transcription.threadCount);
+	tmpSettings.transcription.whisperExe = edWhisperExe->Text;
+	tmpSettings.transcription.model = edWhisperModel->Text;
+	tmpSettings.transcription.language = edWhisperLanguage->Text;
+	tmpSettings.transcription.threadCount = StrToIntDef(cbWhisperThreadCount->Text, tmpSettings.transcription.threadCount);
 
 	*appSettings = tmpSettings;
 	this->Close();	
@@ -83,13 +83,13 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 void __fastcall TfrmSettings::chbAlwaysOnTopClick(TObject *Sender)
 {
-	tmpSettings.frmMain.bAlwaysOnTop = chbAlwaysOnTop->Checked;	
+	tmpSettings.frmMain.alwaysOnTop = chbAlwaysOnTop->Checked;	
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmSettings::cmbMaxUiLogLinesChange(TObject *Sender)
 {
-	tmpSettings.Logging.iMaxUiLogLines = StrToInt(cmbMaxUiLogLines->Text);	
+	tmpSettings.logging.maxUiLogLines = StrToInt(cmbMaxUiLogLines->Text);	
 }
 //---------------------------------------------------------------------------
 
@@ -112,12 +112,12 @@ void TfrmSettings::RefreshAudioDevicesList(void)
 
 	for(int i=0; i<cbAudioOutput->Items->Count; i++)
 	{
-		if (tmpSettings.Audio.outputDevice == "")
+		if (tmpSettings.audio.outputDevice == "")
 		{
 			cbAudioOutput->ItemIndex = 0;
 			break;
 		}
-		if(cbAudioOutput->Items->Strings[i] == tmpSettings.Audio.outputDevice)
+		if(cbAudioOutput->Items->Strings[i] == tmpSettings.audio.outputDevice)
 		{
             cbAudioOutput->ItemIndex = i;
             break;
@@ -125,7 +125,7 @@ void TfrmSettings::RefreshAudioDevicesList(void)
 	}
 	{
 		TComboBox *target = cbAudioOutput;
-		AnsiString selected = tmpSettings.Audio.outputDevice;
+		AnsiString selected = tmpSettings.audio.outputDevice;
 		// convention: if selected device is not found - add it at last item with [NOT FOUND] text and set non-zero Tag
 		target->Tag = 0;
 		if (target->ItemIndex < 0 && target->Items->Count > 0 && selected != "")

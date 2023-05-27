@@ -40,8 +40,9 @@ Version 0.3
 
 
 TODO:
-	- start transcription for all files with missing transcription
-	- full text search for all transcriptions: Tools / Browse transcriptions
+	- start transcription for multiple selected files
+	- Tools / Browse transcriptions?
+	- show transcription in part of the window if recording is selected?
 	- rewind audio to matching position when playing and sentence was clicked
 	- test space in whisper directories (model file, source file)
 	- optimize for large number of recordings
