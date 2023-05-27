@@ -69,7 +69,6 @@ __published:	// IDE-managed Components
 	void __fastcall btnPauseClick(TObject *Sender);
 	void __fastcall btnPlayClick(TObject *Sender);
 	void __fastcall miOpenFileInDefaultPlayerClick(TObject *Sender);
-	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
 	void __fastcall miTranscribeFileClick(TObject *Sender);
 	void __fastcall tmrTransciptionTimer(TObject *Sender);
 	void __fastcall miShowFileTranscriptionClick(TObject *Sender);
@@ -111,6 +110,7 @@ public:		// User declarations
 	__fastcall TfrmRecordings(TComponent* Owner);
 	void GenerateMissingTranscriptionsForFilteredFiles(void);
 	void StopTranscribing(void);
+	void Shutdown(void);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmRecordings *frmRecordings;

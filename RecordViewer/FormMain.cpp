@@ -52,7 +52,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TfrmMain::FormCloseQuery(TObject *Sender, bool &CanClose)
 {
-	frmRecordings->StopTranscribing();
+	frmRecordings->Shutdown();
 
 	AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
 	appSettings.frmMain.windowMaximized = (this->WindowState == wsMaximized);

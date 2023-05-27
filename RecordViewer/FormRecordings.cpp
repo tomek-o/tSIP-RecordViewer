@@ -673,11 +673,6 @@ void __fastcall TfrmRecordings::miOpenFileInDefaultPlayerClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfrmRecordings::FormCloseQuery(TObject *Sender, bool &CanClose)
-{
-	player.Stop();	
-}
-//---------------------------------------------------------------------------
 
 void __fastcall TfrmRecordings::miTranscribeFileClick(TObject *Sender)
 {
@@ -831,3 +826,8 @@ void __fastcall TfrmRecordings::cbTranscriptionFilterChange(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void TfrmRecordings::Shutdown(void)
+{
+	player.Stop();
+	StopTranscribing();
+}

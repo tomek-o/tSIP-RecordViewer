@@ -102,6 +102,7 @@ DWORD WINAPI AudioFilePlayer::WaveOutThreadProc(LPVOID data)
 			Sleep(50);
 		}
 	#endif
+		waveOutReset(&player->hWaveOut);	
 		// wait for all blocks to complete
 		while(player->waveFreeBlockCount < PLAY_BLOCK_COUNT /* && !player->bStopRequested && !iError && !pAudioRec->bRewindRequested */)
 			Sleep(10);
