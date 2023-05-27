@@ -34,9 +34,11 @@ Version 0.3
 	- English-only and multilanguage models in various sizes: 75 MB, 142 MB, 466 MB, 1.5 GB, 2.9 GB on disk, similar RAM usage
 	- diarization for stereo recordings with separate processing for each audio channel and merging sentences back when displaying
 	- works with all tSIP file formats: mono/stereo PCM wave and Opus OGG files
+	- transcription text can be used to filter recordings
 - TMediaPlayer replaced with own playback function
 - playback for both .wav and .ogg files
 - settings: output audio device selection
+- settings format changed to JSON
 
 
 TODO:
@@ -44,6 +46,5 @@ TODO:
 	- Tools / Browse transcriptions?
 	- show transcription in part of the window if recording is selected?
 	- rewind audio to matching position when playing and sentence was clicked
-	- test space in whisper directories (model file, source file)
 	- optimize for large number of recordings
 */
