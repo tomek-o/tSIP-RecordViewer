@@ -22,9 +22,29 @@
 TfrmRecordings *frmRecordings;
 
 namespace {
-	Contacts contacts;
-	enum { TRACKBAR_TICKS_PER_SECOND = 10 };
-	AudioFileTranscription transcription;	
+
+Contacts contacts;
+enum { TRACKBAR_TICKS_PER_SECOND = 10 };
+AudioFileTranscription transcription;
+
+AnsiString GetWhisperExe(void)
+{
+	AnsiString whisperExe = appSettings.transcription.whisperExe;
+	AnsiString relPath = ExtractFileDir(Application->ExeName) + "\\" + whisperExe;
+	if (FileExists(relPath))
+		whisperExe = relPath;
+	return whisperExe;
+}
+
+AnsiString GetModel(void)
+{
+	AnsiString model = appSettings.transcription.model;
+	AnsiString relPath = ExtractFileDir(Application->ExeName) + "\\" + model;
+	if (FileExists(relPath))
+		model = relPath;
+	return model;
+}
+
 }
 
 //---------------------------------------------------------------------------
@@ -676,6 +696,9 @@ void __fastcall TfrmRecordings::miOpenFileInDefaultPlayerClick(TObject *Sender)
 
 void __fastcall TfrmRecordings::miTranscribeFileClick(TObject *Sender)
 {
+	if (CheckWhisper())
+		return;
+
 	if (transcription.IsRunning() || listTranscriptionProcess.active)
 	{
 		MessageBox(this->Handle, "Another transcription is already running",
@@ -704,20 +727,32 @@ void TfrmRecordings::TranscribeRecord(unsigned int recordId, const S_RECORD &rec
 {
 	AnsiString filename = record.asFilename;
 
-	AnsiString relPath;
-
-	AnsiString whisperExe = appSettings.transcription.whisperExe;
-	relPath = ExtractFileDir(Application->ExeName) + "\\" + whisperExe;
-	if (FileExists(relPath))
-		whisperExe = relPath;
-
-	AnsiString model = appSettings.transcription.model;
-	relPath = ExtractFileDir(Application->ExeName) + "\\" + model;
-	if (FileExists(relPath))
-		model = relPath;
+	AnsiString whisperExe = GetWhisperExe();
+	AnsiString model = GetModel();
 
 	transcription.Transcribe(recordId, filename, whisperExe, model,
 		appSettings.transcription.language, appSettings.transcription.threadCount);
+}
+
+int TfrmRecordings::CheckWhisper(void)
+{
+	AnsiString whisperExe = GetWhisperExe();
+	AnsiString model = GetModel();
+
+	if (!FileExists(whisperExe))
+	{
+		MessageBox(this->Handle, "whisper.cpp executable not found!\nSee settings.", this->Caption.c_str(), MB_ICONEXCLAMATION);
+		return -1;
+	}
+
+	if (!FileExists(model))
+	{
+		MessageBox(this->Handle, "whisper.cpp model file not found!\nNote: there are multiple models available, in multiple sizes, English-only or multilanguage.\nSee settings.",
+			this->Caption.c_str(), MB_ICONEXCLAMATION);
+		return -1;
+	}
+
+	return 0;
 }
 
 
@@ -801,6 +836,9 @@ void __fastcall TfrmRecordings::popupRecordsPopup(TObject *Sender)
 
 void TfrmRecordings::GenerateMissingTranscriptionsForFilteredFiles(void)
 {
+	if (CheckWhisper())
+		return;
+
 	if (listTranscriptionProcess.active || transcription.IsRunning())
 	{
 		MessageBox(this->Handle, "Another transcription is already running.\nStop it first if you want to start new transcription process.",

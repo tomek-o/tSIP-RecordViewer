@@ -106,6 +106,8 @@ private:	// User declarations
 		{}
 	} listTranscriptionProcess;
 
+	int CheckWhisper(void);
+
 public:		// User declarations
 	__fastcall TfrmRecordings(TComponent* Owner);
 	void GenerateMissingTranscriptionsForFilteredFiles(void);
