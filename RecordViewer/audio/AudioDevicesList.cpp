@@ -37,8 +37,7 @@ void AudioDevicesList::FillComboBox(Stdctrls::TComboBox *target, AnsiString sele
 {
     target->Tag = 0;
 	target->Items->Clear();
-	std::vector<AnsiString> *v = NULL;
-	v = &AudioDevicesList::Instance().winwaveDevsOut;
+	std::vector<AnsiString> *v = &AudioDevicesList::Instance().winwaveDevsOut;
 	assert(v);
 	for (unsigned int i=0; i<v->size(); i++)
 	{

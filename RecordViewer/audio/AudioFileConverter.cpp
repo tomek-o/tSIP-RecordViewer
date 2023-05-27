@@ -251,6 +251,7 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 	if (speex_state) {
 		speex_resampler_destroy(speex_state);
 		speex_state = NULL;
+		(void)speex_state;
 	}	
 
 	fclose(fp);

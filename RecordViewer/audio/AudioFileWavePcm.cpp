@@ -52,7 +52,7 @@ int wav_header_decode(struct AudioFileWavePcm::WaveFormat *fmt, size_t *datasize
 {
 	struct wav_chunk header, format, chunk;
 	uint8_t rifftype[4];        /* "WAVE" */
-	int err = 0;
+	int err;
 
 	err = chunk_decode(&header, f);
 	if (err)

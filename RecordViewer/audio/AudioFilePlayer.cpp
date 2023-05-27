@@ -87,7 +87,6 @@ DWORD WINAPI AudioFilePlayer::WaveOutThreadProc(LPVOID data)
 			}
 			else
 			{
-				bEof = true;
 				break;
 			}
 		}
