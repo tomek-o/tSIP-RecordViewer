@@ -700,12 +700,12 @@ void __fastcall TfrmRecordings::miTranscribeFileClick(TObject *Sender)
             	return;
 			}
 		}
-		TranscribeRecord(record);
+		TranscribeRecord(id, record);
 	}
 }
 //---------------------------------------------------------------------------
 
-void TfrmRecordings::TranscribeRecord(const S_RECORD &record)
+void TfrmRecordings::TranscribeRecord(unsigned int recordId, const S_RECORD &record)
 {
 	AnsiString filename = record.asFilename;
 
@@ -721,7 +721,7 @@ void TfrmRecordings::TranscribeRecord(const S_RECORD &record)
 	if (FileExists(relPath))
 		model = relPath;
 
-	transcription.Transcribe(filename, whisperExe, model,
+	transcription.Transcribe(recordId, filename, whisperExe, model,
 		appSettings.transcription.language, appSettings.transcription.threadCount);
 }
 
@@ -754,7 +754,7 @@ void __fastcall TfrmRecordings::tmrTransciptionTimer(TObject *Sender)
 						S_RECORD &record = records[id];
 						if (record.hasTranscription() == false)
 						{
-							TranscribeRecord(record);
+							TranscribeRecord(id, record);
 							break;
 						}
 					}
@@ -763,6 +763,18 @@ void __fastcall TfrmRecordings::tmrTransciptionTimer(TObject *Sender)
 		}
 	}
 	lblTranscriptionState->Caption = text;
+
+	{
+		unsigned int recordId = 0xFFFFFFFF;
+		if (transcription.GetTranscribedId(recordId) == 0)
+		{
+			if (recordId < records.size())
+			{
+				S_RECORD &record = records[recordId];
+				record.loadTranscription();
+			}
+		}
+	}
 }
 //---------------------------------------------------------------------------
 

@@ -10,6 +10,7 @@
 #include "AudioFileTranscriber.h"
 #include "AudioTranscriptionFileName.h"
 #include "Log.h"
+#include "common/ScopedLock.h"
 #include <assert.h>
 #include <SysUtils.hpp>
 #include <Forms.hpp>
@@ -139,11 +140,18 @@ int AudioFileTranscription::Process(void)
 	delete file;
 
 	running = false;
+
+	if (status == 0)
+	{
+	    ScopedLock<Mutex> lock(mutex);	
+    	transcribedIds.push_back(fileId);
+	}
+
 	return status;
 }
 
 
-int AudioFileTranscription::Transcribe(AnsiString fileName, AnsiString whisperExe, AnsiString model, AnsiString language, unsigned int threadCount)
+int AudioFileTranscription::Transcribe(unsigned int fileId, AnsiString fileName, AnsiString whisperExe, AnsiString model, AnsiString language, unsigned int threadCount)
 {
     int status = 0;
 	if (running)
@@ -156,6 +164,7 @@ int AudioFileTranscription::Transcribe(AnsiString fileName, AnsiString whisperEx
 
 	LOG("Transcribing %s", ExtractFileName(fileName).c_str());
 
+	this->fileId = fileId;
 	this->fileName = fileName;
 	this->whisperExe = whisperExe;
 	this->model = model;
@@ -199,3 +208,14 @@ void AudioFileTranscription::Stop(void)
 		TerminateProcess(hProcess, -1);
 	}	
 }
+
+int AudioFileTranscription::GetTranscribedId(unsigned int &id)
+{
+    ScopedLock<Mutex> lock(mutex);
+	if (transcribedIds.empty())
+		return -1;
+	id = transcribedIds.front();
+	transcribedIds.pop_front();
+	return 0;
+}
+

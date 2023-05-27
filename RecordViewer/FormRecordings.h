@@ -95,7 +95,7 @@ private:	// User declarations
 	void Play(void);
 	void StopPlaySelected(void);
 
-	void TranscribeRecord(const S_RECORD &record);
+	void TranscribeRecord(unsigned int recordId, const S_RECORD &record);
 
 	struct ListTranscriptionProcess {
 		bool active;
