@@ -142,7 +142,6 @@ int AudioFileConverter::Convert(AudioFile *file, AnsiString outputFileName, enum
 	}
 	else
 	{
-		int TODO__VERIFY_OUTPUT_BYTES_NUMBER_FROM_RESAMPLING;
 		outputBytes = static_cast<unsigned int>(static_cast<int64_t>(file->GetTotalPcmSamples()) * OUTPUT_SAMPLING / file->GetSampleRate() * sizeof(int16_t));
 	}
 	LOG(PROMPT"Expected output bytes = %u", outputBytes);
