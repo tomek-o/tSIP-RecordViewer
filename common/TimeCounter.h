@@ -19,8 +19,9 @@ public:
 	/** \brief Constructor
 		\param name string that will be visible in printed report
 	*/
-	TimeCounter(char* name):
-		name(name)
+	TimeCounter(const char* name, bool logAtDestructor = true):
+		name(name),
+		logAtDestructor(logAtDestructor)
 	{
 		QueryPerformanceFrequency(&freq);
 		QueryPerformanceCounter(&beginTime);
@@ -28,22 +29,35 @@ public:
 
 	~TimeCounter()
 	{
+		if (logAtDestructor)
+		{
+			double val = getTimeMs();
+			char s[100];
+			snprintf(s, sizeof(s), "%s  %.3f ms\n", name, val);
+			LOG(s);
+		}
+	}
+
+	double getTimeMs(void)
+	{
 		LARGE_INTEGER endTime;
 		double nCalcTime;
-
 		QueryPerformanceCounter(&endTime);
-		nCalcTime = (double)(endTime.QuadPart - beginTime.QuadPart) *
-			1000.0/(double)freq.QuadPart;
-		char s[100];
-		snprintf(s, sizeof(s), "%s  %.3f ms\n", name, nCalcTime);
-		LOG(s);
+		nCalcTime = (double)(endTime.QuadPart - beginTime.QuadPart) * 1000.0/(double)freq.QuadPart;
+		return nCalcTime;
+	}
+
+	const char* getName(void) const
+	{
+		return name;
 	}
 
 protected:
 	LARGE_INTEGER freq;
 	LARGE_INTEGER beginTime;
 
-	char* name;
+	const char* name;
+	bool logAtDestructor;
 };
 
 #define TS_START(id, name) TimeCounter* TC##id = new TimeCounter(name)
