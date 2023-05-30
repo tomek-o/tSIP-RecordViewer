@@ -104,6 +104,12 @@ void __fastcall TfrmRecordings::lvRecordsData(TObject *Sender, TListItem *Item)
 	Item->SubItems->Add(record.asDescription);
 	Item->SubItems->Add(record.asFilename);
 	Item->SubItems->Add(ExtractFileExt(record.asFilename));
+	AnsiString transcriptionStatus;
+	if (record.hasMonoTranscription)
+		transcriptionStatus = "mono";
+	else if (record.hasStereoTranscription)
+		transcriptionStatus = "stereo";
+	Item->SubItems->Add(transcriptionStatus);
 	Item->SubItems->Add(record.size);
 }
 //---------------------------------------------------------------------------
@@ -246,38 +252,82 @@ bool __fastcall TfrmRecordings::v_compare_records(const S_RECORD& d1, const S_RE
 	}
 	else if (column == 1)
 	{
-		if(forward)
+		if (forward)
 			return d1.asDateTime > d2.asDateTime;
 		else
 			return d1.asDateTime < d2.asDateTime;
 	}
 	else if (column == 2)
 	{
-		if(forward)
+		if (forward)
 			return d1.asNumber > d2.asNumber;
 		else
 			return d1.asNumber < d2.asNumber;
 	}
 	else if (column == 3)
 	{
-		if(forward)
+		if (forward)
 			return d1.asDescription > d2.asDescription;
 		else
 			return d1.asDescription < d2.asDescription;
 	}
 	else if (column == 4)
 	{
-		if(forward)
+		if (forward)
 			return d1.asFilename > d2.asFilename;
 		else
 			return d1.asFilename < d2.asFilename;
 	}
-	else
+	else if (column == 5)
 	{
-		if(forward)
+		AnsiString ext1 = ExtractFileExt(d1.asFilename);
+		AnsiString ext2 = ExtractFileExt(d2.asFilename);
+		if (forward)
+			return ext1 > ext2;
+		else
+			return ext1 < ext2;
+	}
+	else if (column == 6)
+	{
+		enum TranscriptionStatus {
+			TR_NONE = 0,
+			TR_MONO,
+			TR_STEREO
+		} tr1, tr2;
+
+		if (d1.hasStereoTranscription)
+			tr1 = TR_STEREO;
+		else if (d1.hasMonoTranscription)
+			tr1 = TR_MONO;
+		else
+			tr1 = TR_NONE;
+
+		if (d2.hasStereoTranscription)
+			tr2 = TR_STEREO;
+		else if (d2.hasMonoTranscription)
+			tr2 = TR_MONO;
+		else
+			tr2 = TR_NONE;
+
+		if (forward)
+		{
+			return tr1 > tr2;
+		}
+		else
+		{
+			return tr1 < tr2;
+		}
+	}
+	else if (column == 7)
+	{
+		if (forward)
 			return d1.size > d2.size;
 		else
 			return d1.size < d2.size;
+	}
+	else
+	{
+		return false;
 	}
 }
 

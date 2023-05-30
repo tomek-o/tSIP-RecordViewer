@@ -4,8 +4,8 @@ object frmRecordings: TfrmRecordings
   Align = alClient
   BorderStyle = bsNone
   Caption = 'Recordings'
-  ClientHeight = 349
-  ClientWidth = 685
+  ClientHeight = 366
+  ClientWidth = 708
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,12 +20,14 @@ object frmRecordings: TfrmRecordings
   TextHeight = 13
   object pnlBottom: TPanel
     Left = 0
-    Top = 245
-    Width = 685
+    Top = 262
+    Width = 708
     Height = 104
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 245
+    ExplicitWidth = 685
     object lblItems: TLabel
       Left = 282
       Top = 44
@@ -72,15 +74,16 @@ object frmRecordings: TfrmRecordings
     object pnlPlayer: TPanel
       Left = 0
       Top = 63
-      Width = 685
+      Width = 708
       Height = 41
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 1
+      ExplicitWidth = 685
       object TrackBar: TTrackBar
         Left = 153
         Top = 0
-        Width = 532
+        Width = 555
         Height = 41
         Align = alClient
         Max = 100
@@ -91,6 +94,7 @@ object frmRecordings: TfrmRecordings
         TickMarks = tmBoth
         Visible = False
         OnKeyDown = lvRecordsKeyDown
+        ExplicitWidth = 532
       end
       object pnlPlayerControl: TPanel
         Left = 0
@@ -167,8 +171,8 @@ object frmRecordings: TfrmRecordings
   object lvRecords: TListView
     Left = 0
     Top = 0
-    Width = 685
-    Height = 245
+    Width = 708
+    Height = 262
     Align = alClient
     Columns = <
       item
@@ -196,7 +200,10 @@ object frmRecordings: TfrmRecordings
         Width = 40
       end
       item
-        Alignment = taRightJustify
+        Caption = 'Transcription'
+        Width = 80
+      end
+      item
         Caption = 'Size'
         Width = 60
       end>
@@ -214,6 +221,8 @@ object frmRecordings: TfrmRecordings
     OnDblClick = lvRecordsDblClick
     OnKeyDown = lvRecordsKeyDown
     OnKeyPress = lvRecordsKeyPress
+    ExplicitWidth = 696
+    ExplicitHeight = 251
   end
   object popupRecords: TPopupMenu
     OnPopup = popupRecordsPopup
