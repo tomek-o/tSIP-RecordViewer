@@ -40,6 +40,14 @@ Version 0.3
 - settings: output audio device selection
 - settings format changed to JSON
 
+Version 0.3.1
+- when translating stereo file and transcription of one of the channels already exist, it is skipped
+- added transcription status (none/mono/stereo) to recoding list
+- added log showing transcription time at the end of transcribing L/R/mono file
+- added min width/height constraints for main window 
+- update _dist with correct AVX-only version of whisper.cpp
+
+
 
 TODO:
 	- start transcription for multiple selected files
@@ -47,4 +55,5 @@ TODO:
 	- show transcription in part of the window if recording is selected?
 	- rewind audio to matching position when playing and sentence was clicked
 	- optimize for large number of recordings
+	- fix some weird issue with playback stopping? not reproduced?
 */
