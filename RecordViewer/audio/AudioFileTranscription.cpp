@@ -11,6 +11,7 @@
 #include "AudioTranscriptionFileName.h"
 #include "Log.h"
 #include "common/ScopedLock.h"
+#include "common/TimeCounter.h"
 #include <assert.h>
 #include <SysUtils.hpp>
 #include <Forms.hpp>
@@ -28,6 +29,7 @@ int CreateTranscription(AudioFile *file, AnsiString fileName, AudioFileChannel c
 	AnsiString whisperExe, AnsiString model, AnsiString language, unsigned int threadCount,
 	HANDLE &hProcess, bool &stopRequest)
 {
+	TimeCounter tc("CreateTranscription", false);
 	AnsiString whisperSourceFileName = ExtractFileDir(Application->ExeName) + "\\tmp_" + GetAudioFileChannelName(channel) + ".wav";
 	AudioFileConverter converter;
 	int status = converter.Convert(file, whisperSourceFileName, channel, stopRequest);
@@ -52,7 +54,7 @@ int CreateTranscription(AudioFile *file, AnsiString fileName, AudioFileChannel c
 			}
 			if (MoveFile(src.c_str(), dest.c_str()))
 			{
-
+            	LOG("Transcription of %s, channel %s created in %.1f s", fileName.c_str(), GetAudioFileChannelName(channel), tc.getTimeMs()/1000); 
 			}
 			else
 			{
@@ -121,10 +123,19 @@ int AudioFileTranscription::Process(void)
 		}
 		else
 		{
-			if (stopRequest == false)
-				status |= CreateTranscription(file, fileName, AUDIO_CHANNEL_L, whisperExe, model, language, threadCount, hProcess, stopRequest);
-			if (stopRequest == false)
-				status |= CreateTranscription(file, fileName, AUDIO_CHANNEL_R, whisperExe, model, language, threadCount, hProcess, stopRequest);
+			AnsiString fileNameL = GetTranscriptionFileName(fileName, AUDIO_CHANNEL_L);
+			AnsiString fileNameR = GetTranscriptionFileName(fileName, AUDIO_CHANNEL_R);
+            // if one of the L/R files exists (possibly transcription stopped in the middle), skip it
+			if (!FileExists(fileNameL))
+			{
+				if (stopRequest == false)
+					status |= CreateTranscription(file, fileName, AUDIO_CHANNEL_L, whisperExe, model, language, threadCount, hProcess, stopRequest);
+			}
+			if (!FileExists(fileNameR))
+			{
+				if (stopRequest == false)
+					status |= CreateTranscription(file, fileName, AUDIO_CHANNEL_R, whisperExe, model, language, threadCount, hProcess, stopRequest);
+			}
 		}
 	}
 	else
