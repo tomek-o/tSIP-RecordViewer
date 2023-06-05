@@ -852,6 +852,7 @@ void __fastcall TfrmRecordings::tmrTransciptionTimer(TObject *Sender)
 			{
 				S_RECORD &record = records[recordId];
 				record.loadTranscription();
+				lvRecords->Invalidate();
 			}
 		}
 	}
