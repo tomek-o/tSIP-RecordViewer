@@ -818,8 +818,8 @@ void __fastcall TfrmRecordings::tmrTransciptionTimer(TObject *Sender)
 		ListTranscriptionProcess &ltr = listTranscriptionProcess;
 		if (ltr.active)
 		{
-			// checking few files for missing transcription at one timer call
-			for (int i=0; i<5; i++)
+			// checking few files for missing transcription at one timer call to skip already transmitted files
+			for (int i=0; i<100; i++)
 			{
 				if (ltr.listPosition >= ltr.recordIds.size())
 				{
