@@ -41,12 +41,13 @@ Version 0.3
 - settings format changed to JSON
 
 Version 0.3.1
-- when translating stereo file and transcription of one of the channels already exist, it is skipped
+- when transcribing stereo file and transcription of one of the channels already exists, it is skipped
 - added transcription status (none/mono/stereo) to recoding list
 - added log showing transcription time at the end of transcribing L/R/mono file
 - added min width/height constraints for main window 
-- update _dist with correct AVX-only version of whisper.cpp
-
+- update _dist with correct AVX-only version of whisper.cpp (though binaries in zip were already corrected in 0.3)
+- fixed filtering of metadata containing non-ANSI characters (UpperCase() vs Ansi::UpperCase())
+- added options to filter by transcription text only (not by metadata)
 
 
 TODO:
