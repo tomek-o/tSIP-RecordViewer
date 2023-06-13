@@ -14,8 +14,6 @@ object frmRecordings: TfrmRecordings
   Font.Style = []
   OldCreateOrder = False
   OnCreate = FormCreate
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object pnlBottom: TPanel
@@ -26,17 +24,15 @@ object frmRecordings: TfrmRecordings
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 245
-    ExplicitWidth = 685
     object lblItems: TLabel
-      Left = 282
+      Left = 289
       Top = 44
       Width = 31
       Height = 13
       Caption = 'Items:'
     end
     object lblItemsCount: TLabel
-      Left = 330
+      Left = 337
       Top = 44
       Width = 6
       Height = 13
@@ -50,7 +46,7 @@ object frmRecordings: TfrmRecordings
       Caption = 'Filter'
     end
     object lblItemsSize: TLabel
-      Left = 385
+      Left = 375
       Top = 44
       Width = 23
       Height = 13
@@ -79,7 +75,6 @@ object frmRecordings: TfrmRecordings
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitWidth = 685
       object TrackBar: TTrackBar
         Left = 153
         Top = 0
@@ -94,7 +89,6 @@ object frmRecordings: TfrmRecordings
         TickMarks = tmBoth
         Visible = False
         OnKeyDown = lvRecordsKeyDown
-        ExplicitWidth = 532
       end
       object pnlPlayerControl: TPanel
         Left = 0
@@ -160,10 +154,10 @@ object frmRecordings: TfrmRecordings
     object cbTranscriptionFilter: TComboBox
       Left = 120
       Top = 41
-      Width = 145
+      Width = 161
       Height = 21
       Style = csDropDownList
-      ItemHeight = 0
+      ItemHeight = 13
       TabOrder = 3
       OnChange = cbTranscriptionFilterChange
     end
@@ -221,8 +215,6 @@ object frmRecordings: TfrmRecordings
     OnDblClick = lvRecordsDblClick
     OnKeyDown = lvRecordsKeyDown
     OnKeyPress = lvRecordsKeyPress
-    ExplicitWidth = 696
-    ExplicitHeight = 251
   end
   object popupRecords: TPopupMenu
     OnPopup = popupRecordsPopup

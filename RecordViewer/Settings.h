@@ -65,17 +65,19 @@ public:
 		bool decodeBase64Uri;
 		enum TranscriptionFilter
 		{
-			TR_FILTER_WITHOUT = 0,
-			TR_FILTER_ALL,
-			TR_FILTER_LOCAL,
-			TR_FILTER_2ND_PARTY,
-
+			TR_FILTER_META_ONLY = 0,
+			TR_FILTER_META_ALL_TRANSCRIPTIONS,
+			TR_FILTER_META_LOCAL_TRANSCRIPTIONS,
+			TR_FILTER_META_2ND_PARTY_TRANSCRIPTIONS,
+			TR_FILTER_ALL_TRANSCRIPTIONS,
+			TR_FILTER_LOCAL_TRANSCRIPTIONS,
+			TR_FILTER_2ND_PARTY_TRANSCRIPTIONS,
 			TR_FILTER__LIMITER
 		} transcriptionFilter;
 		static const char* getTranscriptionFilterName(enum TranscriptionFilter type);
 		Recordings(void):
 			decodeBase64Uri(true),
-			transcriptionFilter(TR_FILTER_ALL)
+			transcriptionFilter(TR_FILTER_META_ALL_TRANSCRIPTIONS)
 		{}
 	} recordings;
 

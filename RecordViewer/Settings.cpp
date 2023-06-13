@@ -23,14 +23,20 @@ const char* Settings::Recordings::getTranscriptionFilterName(enum Settings::Reco
 {
 	switch (type)
 	{
-	case TR_FILTER_WITHOUT:
-		return "without transcription text";
-	case TR_FILTER_ALL:
-		return "with all transcribed text";
-	case TR_FILTER_LOCAL:
-		return "with local text";
-	case TR_FILTER_2ND_PARTY:
-		return "with 2nd party text";
+	case TR_FILTER_META_ONLY:
+		return "meta only";
+	case TR_FILTER_META_ALL_TRANSCRIPTIONS:
+		return "meta + all transcribed text";
+	case TR_FILTER_META_LOCAL_TRANSCRIPTIONS:
+		return "meta + local text";
+	case TR_FILTER_META_2ND_PARTY_TRANSCRIPTIONS:
+		return "meta + 2nd party text";
+	case TR_FILTER_ALL_TRANSCRIPTIONS:
+		return "all transcribed text";
+	case TR_FILTER_LOCAL_TRANSCRIPTIONS:
+		return "local text";
+	case TR_FILTER_2ND_PARTY_TRANSCRIPTIONS:
+		return "2nd party text";
 	default:
 		return "???";
 	}

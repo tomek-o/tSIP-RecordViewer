@@ -132,27 +132,38 @@ void TfrmRecordings::Filter(void)
 		AnsiString asFilter = edFilter->Text;
 		AnsiString asFilterLowerCase = asFilter.LowerCase();
 		AnsiString asFilterUpperCase = asFilter.UpperCase();
-		
+
+		bool filterByMeta =
+			(appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_META_ONLY) ||
+			(appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_META_ALL_TRANSCRIPTIONS) ||
+			(appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_META_LOCAL_TRANSCRIPTIONS) ||
+			(appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_META_2ND_PARTY_TRANSCRIPTIONS);
+
 		for (unsigned int i=0; i<records.size(); i++)
 		{
 			S_RECORD &record = records[i];
 			bool match = false;
 
-			if (record.asDateTime.Pos(asFilter))
+			if (filterByMeta)
 			{
-                match = true;
+				if (record.asDateTime.Pos(asFilter))
+				{
+					match = true;
+				}
+				else if (record.asNumber.UpperCase().Pos(asFilterUpperCase))
+				{
+					match = true;
+				}
+				else if (record.asDescription.UpperCase().Pos(asFilterUpperCase))
+				{
+					match = true;
+				}
 			}
-			else if (record.asNumber.UpperCase().Pos(asFilterUpperCase))
+
+			if (match == false)
 			{
-				match = true;
-			}
-			else if (record.asDescription.UpperCase().Pos(asFilterUpperCase))
-			{
-				match = true;
-			}
-			else
-			{
-				if (appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_ALL)
+				if (appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_META_ALL_TRANSCRIPTIONS ||
+					appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_ALL_TRANSCRIPTIONS)
 				{
 					if (record.fullTranscriptionTextLMono.Pos(asFilterLowerCase) ||
 						record.fullTranscriptionTextR.Pos(asFilterLowerCase))
@@ -160,14 +171,16 @@ void TfrmRecordings::Filter(void)
 						match = true;
 					}
 				}
-				else if (appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_LOCAL)
+				else if (appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_META_LOCAL_TRANSCRIPTIONS ||
+						appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_LOCAL_TRANSCRIPTIONS)
 				{
 					if (record.fullTranscriptionTextLMono.Pos(asFilterLowerCase))
 					{
 						match = true;
 					}
 				}
-				else if (appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_2ND_PARTY)
+				else if (appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_META_2ND_PARTY_TRANSCRIPTIONS ||
+						appSettings.recordings.transcriptionFilter == Settings::Recordings::TR_FILTER_2ND_PARTY_TRANSCRIPTIONS)
 				{
 					if (record.fullTranscriptionTextR.Pos(asFilterLowerCase))
 					{
