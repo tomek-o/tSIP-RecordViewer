@@ -137,15 +137,16 @@ void TfrmRecordings::Filter(void)
 		{
 			S_RECORD &record = records[i];
 			bool match = false;
+
 			if (record.asDateTime.Pos(asFilter))
 			{
                 match = true;
 			}
-			else if (record.asNumber.Pos(asFilter))
+			else if (record.asNumber.UpperCase().Pos(asFilterUpperCase))
 			{
 				match = true;
 			}
-			else if (UpperCase(record.asDescription).Pos(asFilterUpperCase))
+			else if (record.asDescription.UpperCase().Pos(asFilterUpperCase))
 			{
 				match = true;
 			}
