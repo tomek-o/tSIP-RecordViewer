@@ -653,6 +653,7 @@ void __fastcall TfrmRecordings::miDeleteFilesClick(TObject *Sender)
 		records.erase(records.begin() + *iter);
 	}
 	Filter();
+	lvRecords->ClearSelection();
 }
 //---------------------------------------------------------------------------
 
