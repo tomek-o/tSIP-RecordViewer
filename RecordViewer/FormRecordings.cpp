@@ -70,7 +70,8 @@ __fastcall TfrmRecordings::TfrmRecordings(TComponent* Owner)
 	vol &= 0xFFFF;
 	trbarVolume->Position = vol * (-655);
 
-	lvRecords->Columns->Items[4]->Width = 0;	// filename
+	//lvRecords->Columns->Items[4]->Width = 0;	// filename
+
 	lvRecords->DoubleBuffered = true;
 
 	btnPlay->Enabled = true;
@@ -100,7 +101,10 @@ void __fastcall TfrmRecordings::lvRecordsData(TObject *Sender, TListItem *Item)
 	else
 		Item->ImageIndex = -1;
 	Item->SubItems->Add(record.asDateTime);
-	Item->SubItems->Add(record.asNumber);
+	if (record.asDateTime != "")
+		Item->SubItems->Add(record.asNumber);
+	else
+		Item->SubItems->Add("");
 	Item->SubItems->Add(record.asDescription);
 	Item->SubItems->Add(record.asFilename);
 	Item->SubItems->Add(ExtractFileExt(record.asFilename));
