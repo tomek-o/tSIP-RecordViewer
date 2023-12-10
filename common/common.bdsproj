@@ -141,6 +141,9 @@
           <property category="win32.*.win32b.ilink32" name="option.aa.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.ap.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.dynamicrtl.enabled" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.P.arg" value="32"/>
+          <property category="win32.*.win32b.tlib" name="option.P.arg.merge" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.P.enabled" value="1"/>
           <property category="win32.*.win32b.tlib" name="option.dynamicrtl.enabled" value="0"/>
         </optionset>
       </project>
@@ -156,7 +159,6 @@
         <FILE FILENAME="ScopedLock.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="singleton.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="TimeCounter.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="base64.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="base64" FORMNAME="" DESIGNCLASS="" ADDITIONAL="base64.h"/>
         <FILE FILENAME="bin2str.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bin2str" FORMNAME="" DESIGNCLASS="" ADDITIONAL="bin2str.h"/>
         <FILE FILENAME="Colors.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Colors" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Colors.h"/>
         <FILE FILENAME="KeybKeys.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="KeybKeys" FORMNAME="" DESIGNCLASS="" ADDITIONAL="KeybKeys.h"/>
@@ -176,6 +178,8 @@
         <FILE FILENAME="well512.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="well512" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="well512.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="MathUtils.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="MathUtils" FORMNAME="" DESIGNCLASS="" ADDITIONAL="MathUtils.h"/>
+        <FILE FILENAME="DebugFileBinaryDump.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="DebugFileBinaryDump" FORMNAME="" DESIGNCLASS="" ADDITIONAL="DebugFileBinaryDump.h"/>
+        <FILE FILENAME="base64.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="base64" FORMNAME="" DESIGNCLASS="" ADDITIONAL="base64.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
