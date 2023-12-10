@@ -6,6 +6,7 @@
 #include "AudioFileFactory.h"
 #include "AudioDevicesList.h"
 #include "Log.h"
+//#include "common/DebugFileBinaryDump.h"
 
 //---------------------------------------------------------------------------
 
@@ -62,6 +63,7 @@ DWORD WINAPI AudioFilePlayer::WaveOutThreadProc(LPVOID data)
 	if (!iError)
 	{
 		bool bEof = false;
+		//DebugFileBinaryDump dump;
 
 		while(!player->stopRequest && !bEof && !iError)
 		{
@@ -83,6 +85,7 @@ DWORD WINAPI AudioFilePlayer::WaveOutThreadProc(LPVOID data)
 			}
 			if (ret == 0 && count > 0)
 			{
+                //dump.Write(buffer, sizeof(buffer));
 				player->writeAudio(player->hWaveOut, buffer, sizeof(buffer));
 			}
 			else
@@ -276,7 +279,7 @@ int AudioFilePlayer::Play(AnsiString fileName, AnsiString audioDevice)
 	if (file == NULL)
 		return -1;
 
-	playBlockSize = file->GetSampleRate() / 4;
+	playBlockSize = file->GetSampleRate() / 2;
 
 	playing = true;
 	WaveOutThread = CreateThread(NULL, 0, WaveOutThreadProc, this, THREAD_PRIORITY_HIGHEST, &dwtid);
