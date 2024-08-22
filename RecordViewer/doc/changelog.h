@@ -49,6 +49,9 @@ Version 0.3.1
 - fixed filtering of metadata containing non-ANSI characters (UpperCase() vs Ansi::UpperCase())
 - added options to filter by transcription text only (not by metadata)
 
+Version 0.3.2
+- fixed playback for 44100 sps files
+- clearing list selection after deleting items
 
 TODO:
 	- start transcription for multiple selected files
